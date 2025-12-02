@@ -16,22 +16,24 @@ program example_tridiagonal_solve
     !
     ! Example RHS chosen so that x(i)=1 is solution.
     ! -------------------------------------------
-    du = [2.0_dp, 5.0_dp, 8.0_dp]
-    dv = [1.0_dp, 4.0_dp, 7.0_dp, 10.0_dp]
-    dl = [3.0_dp, 6.0_dp, 9.0_dp]
-
-    b = [11.0_dp, 12.0_dp, 13.0_dp, 14.0_dp]
+    call random_number(du)
+    call random_number(dv)
+    call random_number(dl)
+    call random_number(b)
 
     ! -------------------------------------------
     ! Construct the Tridiagonal matrix type
     ! -------------------------------------------
     A = Tridiagonal(dl, dv, du)
-
+    print*, "b: "
+    print *, b
     call solve(A, b, x)
 
     print *, "Solution x:"
     do i = 1, n
         print *, x(i)
     end do
+    print*, "Ax: "
+    print *, matmul(dense(A), x)
 
 end program example_tridiagonal_solve
