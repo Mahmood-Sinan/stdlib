@@ -1,2 +1,5 @@
 ADD_EXAMPLE(specialmatrices_dp_spmv)
 ADD_EXAMPLE(tridiagonal_dp_type)
+ADD_EXAMPLE(tridiagonal_dp_solve)
+ADD_EXAMPLE(tridiagonal_dp_determinant)
+ADD_EXAMPLE(tridiagonal_dp_inverse)

@@ -4,7 +4,7 @@
 #:set C_KINDS_TYPES = list(zip(CMPLX_KINDS, CMPLX_TYPES, CMPLX_SUFFIX))
 #:set KINDS_TYPES = R_KINDS_TYPES+C_KINDS_TYPES
 submodule (stdlib_specialmatrices) tridiagonal_matrices
-    use stdlib_linalg_lapack, only: lagtm
+    use stdlib_linalg_lapack, only: lagtm, gttrf, gttrs
 
     character(len=*), parameter :: this = "tridiagonal matrices"
     contains
@@ -187,6 +187,44 @@ submodule (stdlib_specialmatrices) tridiagonal_matrices
     #:endfor
     #:endfor
 
+    #:for k1, t1, s1 in (KINDS_TYPES)
+    module subroutine solve_tridiag_${s1}$(A, b, x)
+        type(tridiagonal_${s1}$_type), intent(in) :: A
+        ${t1}$, intent(in), contiguous :: b(:)
+        ${t1}$, intent(inout), contiguous :: x(:)
+
+        !Internal variables.
+        integer(ilp) :: i
+        ${t1}$, allocatable :: c(:), d(:)
+        ${t1}$ :: denom
+
+        associate(u => A%du, v => A%dv, l => A%dl, n=> A%n)
+            #:if t1.startswith('complex')
+            allocate(c(n-1), source = zero_c${k1}$)
+            allocate(d(n), source = zero_c${k1}$)
+            #:else
+            allocate(c(n-1), source = zero_${k1}$)
+            allocate(d(n), source = zero_${k1}$)
+            #:endif
+            c(1) = u(1)/v(1)
+            d(1) = b(1)/v(1)
+            do i = 2,n-1
+                denom = (v(i) - l(i - 1) * c(i - 1))
+                c(i) = u(i)/denom
+                d(i) = (b(i) - l(i - 1) * d(i - 1))/denom
+            end do
+            if(n > 1) then
+                denom = (v(n) - l(n - 1) * c(n - 1))
+                d(n) = (b(n) - l(n - 1) * d(n - 1))/denom
+            end if
+            x(n) = d(n)
+            do i = n-1, 1, -1
+                x(i) = d(i) - x(i + 1) * c(i)
+            end do
+        end associate
+    end subroutine
+    #:endfor
+
     !-------------------------------------
     !-----                           -----
     !-----     UTILITY FUNCTIONS     -----
@@ -240,6 +278,68 @@ submodule (stdlib_specialmatrices) tridiagonal_matrices
         #:else
         B = tridiagonal(A%du, A%dv, A%dl)
         #:endif
+    end function
+    #:endfor
+
+    #:for k1, t1, s1 in (KINDS_TYPES)
+    module function determinant_tridiagonal_${s1}$(A) result(B)
+        type(tridiagonal_${s1}$_type), intent(in) :: A
+        ${t1}$ :: B
+
+        integer(ilp) :: i
+        ${t1}$ :: f0, f1, f2
+        #:if t1.startswith("complex")
+            f0 = one_c${k1}$
+        #:else
+            f0 = one_${k1}$
+        #:endif
+        associate(du => A%du, dv => A%dv, dl => A%dl, n => A%n)
+            f1 = dv(1)
+            if(n == 1) then
+                B = f1
+                return
+            end if
+
+            do i = 2, n
+                f2 = dv(i)*f1 - dl(i - 1) * du(i - 1) * f0
+                f0 = f1
+                f1 = f2
+            end do
+            B = f2
+        end associate
+    end function
+    #:endfor
+
+    #:for k1, t1, s1 in (KINDS_TYPES)
+    module function inverse_tridiagonal_${s1}$(A) result(B)
+        type(tridiagonal_${s1}$_type), intent(in) :: A
+        ${t1}$, allocatable :: B(:, :)
+        ${t1}$, allocatable :: dl(:), du(:), dv(:), du2(:)
+        integer(ilp) :: n, info
+        integer(ilp), allocatable :: ipiv(:)
+
+        if(determinant(A) == 0.0_${k1}$) then
+            print*, "A is singular and hence non invertable"
+            return
+        end if
+        n = A%n
+        allocate(B(n,n))
+        B = 0.0_${k1}$
+        do info = 1, n
+            B(info, info) = 1.0_${k1}$
+        end do
+        allocate(dv(n), source = A%dv)
+        if(n > 1) then
+            allocate(dl(n - 1), source = A%dl)
+            allocate(du(n - 1), source = A%du)
+        end if
+        if(n > 2) then
+            allocate(du2(n - 2))
+            du2 = 0.0_${k1}$
+        end if
+        allocate(ipiv(n))
+        call gttrf(n, dl, dv, du, du2, ipiv, info)
+        call gttrs('N', n, n, dl, dv, du, du2, ipiv, B, n, info)
     end function
     #:endfor
 

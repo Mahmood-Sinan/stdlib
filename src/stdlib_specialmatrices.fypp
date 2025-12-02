@@ -15,8 +15,8 @@ module stdlib_specialmatrices
     implicit none
     private
     public :: tridiagonal
-    public :: spmv
-    public :: dense, transpose, hermitian
+    public :: spmv, solve
+    public :: dense, transpose, hermitian, determinant, inverse
     public :: operator(*), operator(+), operator(-)
 
     !--------------------------------------
@@ -152,6 +152,18 @@ module stdlib_specialmatrices
         #:endfor
         #:endfor
     end interface
+    
+    ! solve equations of the type A * x = b where A is tridiagonal, but fails when zero pivot is encountered
+    interface solve
+    #:for k1, t1, s1 in (KINDS_TYPES)
+    module subroutine solve_tridiag_${s1}$(A, b, x)
+        type(tridiagonal_${s1}$_type), intent(in) :: A
+        ${t1}$, intent(in), contiguous :: b(:)
+        ${t1}$, intent(inout), contiguous :: x(:)
+    end subroutine
+    #:endfor
+    end interface
+
 
     !-------------------------------------
     !-----                           -----
@@ -201,6 +213,23 @@ module stdlib_specialmatrices
         #:endfor
     end interface
 
+    interface determinant
+    #:for k1, t1, s1 in (KINDS_TYPES)
+    module function determinant_tridiagonal_${s1}$(A) result(B)
+        type(tridiagonal_${s1}$_type), intent(in) :: A
+        ${t1}$ :: B
+    end function
+    #:endfor
+    end interface
+
+    interface inverse
+    #:for k1, t1, s1 in (KINDS_TYPES)
+    module function inverse_tridiagonal_${s1}$(A) result(B)
+        type(tridiagonal_${s1}$_type), intent(in) :: A
+        ${t1}$, allocatable :: B(:, :)
+    end function
+    #:endfor
+    end interface
     !----------------------------------------
     !-----                              -----
     !-----     ARITHMETIC OPERATORS     -----
