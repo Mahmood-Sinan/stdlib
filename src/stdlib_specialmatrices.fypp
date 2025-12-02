@@ -153,13 +153,13 @@ module stdlib_specialmatrices
         #:endfor
     end interface
     
-    ! solve equations of the type A * x = b where A is tridiagonal, but fails when zero pivot is encountered
+    ! solve equations of the type A * x = b where A is tridiagonal
     interface solve
     #:for k1, t1, s1 in (KINDS_TYPES)
     module subroutine solve_tridiag_${s1}$(A, b, x)
         type(tridiagonal_${s1}$_type), intent(in) :: A
         ${t1}$, intent(in), contiguous :: b(:)
-        ${t1}$, intent(inout), contiguous :: x(:)
+        ${t1}$, intent(inout), contiguous, target :: x(:)
     end subroutine
     #:endfor
     end interface

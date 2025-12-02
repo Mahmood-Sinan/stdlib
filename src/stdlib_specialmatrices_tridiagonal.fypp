@@ -191,37 +191,29 @@ submodule (stdlib_specialmatrices) tridiagonal_matrices
     module subroutine solve_tridiag_${s1}$(A, b, x)
         type(tridiagonal_${s1}$_type), intent(in) :: A
         ${t1}$, intent(in), contiguous :: b(:)
-        ${t1}$, intent(inout), contiguous :: x(:)
+        ${t1}$, intent(inout), contiguous, target :: x(:)
 
         !Internal variables.
-        integer(ilp) :: i
-        ${t1}$, allocatable :: c(:), d(:)
-        ${t1}$ :: denom
+        ${t1}$, allocatable :: dl(:), du(:), dv(:), du2(:)
+        integer(ilp) :: n, info
+        integer(ilp), allocatable :: ipiv(:)
+        ${t1}$, pointer :: xmat(:, :)
 
-        associate(u => A%du, v => A%dv, l => A%dl, n=> A%n)
-            #:if t1.startswith('complex')
-            allocate(c(n-1), source = zero_c${k1}$)
-            allocate(d(n), source = zero_c${k1}$)
-            #:else
-            allocate(c(n-1), source = zero_${k1}$)
-            allocate(d(n), source = zero_${k1}$)
-            #:endif
-            c(1) = u(1)/v(1)
-            d(1) = b(1)/v(1)
-            do i = 2,n-1
-                denom = (v(i) - l(i - 1) * c(i - 1))
-                c(i) = u(i)/denom
-                d(i) = (b(i) - l(i - 1) * d(i - 1))/denom
-            end do
-            if(n > 1) then
-                denom = (v(n) - l(n - 1) * c(n - 1))
-                d(n) = (b(n) - l(n - 1) * d(n - 1))/denom
-            end if
-            x(n) = d(n)
-            do i = n-1, 1, -1
-                x(i) = d(i) - x(i + 1) * c(i)
-            end do
-        end associate
+        n = A%n
+        x = b
+        allocate(dv(n), source = A%dv)
+        if(n > 1) then
+            allocate(dl(n - 1), source = A%dl)
+            allocate(du(n - 1), source = A%du)
+        end if
+        if(n > 2) then
+            allocate(du2(n - 2))
+            du2 = 0.0_${k1}$
+        end if
+        allocate(ipiv(n))
+        call gttrf(n, dl, dv, du, du2, ipiv, info)
+        xmat(1:n, 1:1) => x
+        call gttrs('N', n, 1, dl, dv, du, du2, ipiv, xmat, n, info)
     end subroutine
     #:endfor
 
