@@ -3,15 +3,15 @@ program example_tridiagonal_inverse
     use stdlib_specialmatrices, only: tridiagonal_dp_type, tridiagonal, dense, inverse
     implicit none
 
-    integer, parameter :: n = 4
+    integer, parameter :: n = 2
     type(Tridiagonal_dp_type) :: A
     real(dp) :: dl(n-1), dv(n), du(n-1)
     real(dp) :: B(n, n), check(n, n)
 
     integer :: i, j
-    call random_number(dl)
-    call random_number(dv)
-    call random_number(du)
+    dv = [0.0_dp, 1.0_dp]
+    du = [1.0_dp]
+    dl = [0.0_dp]
 
     A = Tridiagonal(dl, dv, du)
     B = inverse(A)

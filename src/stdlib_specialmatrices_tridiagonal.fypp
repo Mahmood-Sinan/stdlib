@@ -190,16 +190,16 @@ submodule (stdlib_specialmatrices) tridiagonal_matrices
     #:for k1, t1, s1 in (KINDS_TYPES)
     module subroutine solve_tridiag_${s1}$(A, b, x)
         type(tridiagonal_${s1}$_type), intent(in) :: A
-        ${t1}$, intent(in), contiguous :: b(:)
-        ${t1}$, intent(inout), contiguous, target :: x(:)
+        ${t1}$, intent(in), contiguous :: b(:,:)
+        ${t1}$, intent(inout), contiguous, target :: x(:,:)
 
         !Internal variables.
         ${t1}$, allocatable :: dl(:), du(:), dv(:), du2(:)
-        integer(ilp) :: n, info
+        integer(ilp) :: n, nrhs, info
         integer(ilp), allocatable :: ipiv(:)
-        ${t1}$, pointer :: xmat(:, :)
 
         n = A%n
+        nrhs = size(b,2)
         x = b
         allocate(dv(n), source = A%dv)
         if(n > 1) then
@@ -212,8 +212,7 @@ submodule (stdlib_specialmatrices) tridiagonal_matrices
         end if
         allocate(ipiv(n))
         call gttrf(n, dl, dv, du, du2, ipiv, info)
-        xmat(1:n, 1:1) => x
-        call gttrs('N', n, 1, dl, dv, du, du2, ipiv, xmat, n, info)
+        call gttrs('N', n, nrhs, dl, dv, du, du2, ipiv, x, n, info)
     end subroutine
     #:endfor
 
@@ -310,10 +309,6 @@ submodule (stdlib_specialmatrices) tridiagonal_matrices
         integer(ilp) :: n, info
         integer(ilp), allocatable :: ipiv(:)
 
-        if(determinant(A) == 0.0_${k1}$) then
-            print*, "A is singular and hence non invertable"
-            return
-        end if
         n = A%n
         allocate(B(n,n))
         B = 0.0_${k1}$
@@ -331,6 +326,11 @@ submodule (stdlib_specialmatrices) tridiagonal_matrices
         end if
         allocate(ipiv(n))
         call gttrf(n, dl, dv, du, du2, ipiv, info)
+        if (info /= 0) then
+            print *, "inverse_tridiagonal: matrix is singular at pivot ", info
+            B = 0.0_${k1}$
+            return
+        end if
         call gttrs('N', n, n, dl, dv, du, du2, ipiv, B, n, info)
     end function
     #:endfor
