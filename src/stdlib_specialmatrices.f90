@@ -110,7 +110,7 @@ module stdlib_specialmatrices
             !! Matrix dimension.
             type(tridiagonal_sp_type) :: A
             !! Corresponding Tridiagonal matrix.
-        end function   
+        end function
 
         module function initialize_tridiagonal_impure_sp(dl, dv, du, err) result(A)
             !! Construct a `tridiagonal` matrix from the rank-1 arrays
@@ -133,7 +133,7 @@ module stdlib_specialmatrices
             !! Error handling.
             type(tridiagonal_sp_type) :: A
             !! Corresponding Tridiagonal matrix.
-        end function   
+        end function
         pure module function initialize_tridiagonal_pure_dp(dl, dv, du) result(A)
             !! Construct a `tridiagonal` matrix from the rank-1 arrays
             !! `dl`, `dv` and `du`.
@@ -151,7 +151,7 @@ module stdlib_specialmatrices
             !! Matrix dimension.
             type(tridiagonal_dp_type) :: A
             !! Corresponding Tridiagonal matrix.
-        end function   
+        end function
 
         module function initialize_tridiagonal_impure_dp(dl, dv, du, err) result(A)
             !! Construct a `tridiagonal` matrix from the rank-1 arrays
@@ -174,7 +174,7 @@ module stdlib_specialmatrices
             !! Error handling.
             type(tridiagonal_dp_type) :: A
             !! Corresponding Tridiagonal matrix.
-        end function   
+        end function
         pure module function initialize_tridiagonal_pure_csp(dl, dv, du) result(A)
             !! Construct a `tridiagonal` matrix from the rank-1 arrays
             !! `dl`, `dv` and `du`.
@@ -192,7 +192,7 @@ module stdlib_specialmatrices
             !! Matrix dimension.
             type(tridiagonal_csp_type) :: A
             !! Corresponding Tridiagonal matrix.
-        end function   
+        end function
 
         module function initialize_tridiagonal_impure_csp(dl, dv, du, err) result(A)
             !! Construct a `tridiagonal` matrix from the rank-1 arrays
@@ -215,7 +215,7 @@ module stdlib_specialmatrices
             !! Error handling.
             type(tridiagonal_csp_type) :: A
             !! Corresponding Tridiagonal matrix.
-        end function   
+        end function
         pure module function initialize_tridiagonal_pure_cdp(dl, dv, du) result(A)
             !! Construct a `tridiagonal` matrix from the rank-1 arrays
             !! `dl`, `dv` and `du`.
@@ -233,7 +233,7 @@ module stdlib_specialmatrices
             !! Matrix dimension.
             type(tridiagonal_cdp_type) :: A
             !! Corresponding Tridiagonal matrix.
-        end function   
+        end function
 
         module function initialize_tridiagonal_impure_cdp(dl, dv, du, err) result(A)
             !! Construct a `tridiagonal` matrix from the rank-1 arrays
@@ -256,7 +256,7 @@ module stdlib_specialmatrices
             !! Error handling.
             type(tridiagonal_cdp_type) :: A
             !! Corresponding Tridiagonal matrix.
-        end function   
+        end function
     end interface
 
     !----------------------------------
