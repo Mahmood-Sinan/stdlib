@@ -526,6 +526,8 @@ submodule (stdlib_specialmatrices) tridiagonal_matrices
         real(sp) :: alpha_, beta_
         integer(ilp) :: n, nrhs, ldx, ldy
         character(1) :: op_
+        logical :: is_alpha_special, is_beta_special
+
         real(sp), pointer :: xmat(:, :), ymat(:, :)
 
         ! Deal with optional arguments.
@@ -533,13 +535,20 @@ submodule (stdlib_specialmatrices) tridiagonal_matrices
         beta_  = 0.0_sp ; if (present(beta))  beta_  = beta
         op_    = "N"        ; if (present(op))    op_    = op
 
+        is_alpha_special = (alpha_ ==  1.0_sp  .or. alpha_ ==  0.0_sp  .or. alpha_ == -1.0_sp)
+        is_beta_special  = (beta_  ==  1.0_sp  .or. beta_  ==  0.0_sp  .or. beta_  == -1.0_sp)
+
         ! Prepare Lapack arguments.
         n = A%n ; ldx = n ; ldy = n ;
         nrhs =  1 
 
         ! Pointer trick.
         xmat(1:n, 1:nrhs) => x ; ymat(1:n, 1:nrhs) => y
-        call lagtm(op_, n, nrhs, alpha_, A%dl, A%dv, A%du, xmat, ldx, beta_, ymat, ldy)
+        if(is_alpha_special .and. is_beta_special) then
+            call lagtm(op_, n, nrhs, alpha_, A%dl, A%dv, A%du, xmat, ldx, beta_, ymat, ldy)
+        else
+            call glagtm(op_, n, nrhs, alpha_, A%dl, A%dv, A%du, xmat, ldx, beta_, ymat, ldy)
+        end if
     end subroutine
     module subroutine spmv_tridiag_2d_sp(A, x, y, alpha, beta, op)
         type(tridiagonal_sp_type), intent(in) :: A
@@ -553,17 +562,26 @@ submodule (stdlib_specialmatrices) tridiagonal_matrices
         real(sp) :: alpha_, beta_
         integer(ilp) :: n, nrhs, ldx, ldy
         character(1) :: op_
+        logical :: is_alpha_special, is_beta_special
+
 
         ! Deal with optional arguments.
         alpha_ = 1.0_sp ; if (present(alpha)) alpha_ = alpha
         beta_  = 0.0_sp ; if (present(beta))  beta_  = beta
         op_    = "N"        ; if (present(op))    op_    = op
 
+        is_alpha_special = (alpha_ ==  1.0_sp  .or. alpha_ ==  0.0_sp  .or. alpha_ == -1.0_sp)
+        is_beta_special  = (beta_  ==  1.0_sp  .or. beta_  ==  0.0_sp  .or. beta_  == -1.0_sp)
+
         ! Prepare Lapack arguments.
         n = A%n ; ldx = n ; ldy = n ;
         nrhs =  size(x, dim=2, kind=ilp) 
 
-        call lagtm(op_, n, nrhs, alpha_, A%dl, A%dv, A%du, x, ldx, beta_, y, ldy)
+        if(is_alpha_special .and. is_beta_special) then
+            call lagtm(op_, n, nrhs, alpha_, A%dl, A%dv, A%du, x, ldx, beta_, y, ldy)
+        else
+            call glagtm(op_, n, nrhs, alpha_, A%dl, A%dv, A%du, x, ldx, beta_, y, ldy)
+        end if
     end subroutine
     module subroutine spmv_tridiag_1d_dp(A, x, y, alpha, beta, op)
         type(tridiagonal_dp_type), intent(in) :: A
@@ -577,6 +595,8 @@ submodule (stdlib_specialmatrices) tridiagonal_matrices
         real(dp) :: alpha_, beta_
         integer(ilp) :: n, nrhs, ldx, ldy
         character(1) :: op_
+        logical :: is_alpha_special, is_beta_special
+
         real(dp), pointer :: xmat(:, :), ymat(:, :)
 
         ! Deal with optional arguments.
@@ -584,13 +604,20 @@ submodule (stdlib_specialmatrices) tridiagonal_matrices
         beta_  = 0.0_dp ; if (present(beta))  beta_  = beta
         op_    = "N"        ; if (present(op))    op_    = op
 
+        is_alpha_special = (alpha_ ==  1.0_dp  .or. alpha_ ==  0.0_dp  .or. alpha_ == -1.0_dp)
+        is_beta_special  = (beta_  ==  1.0_dp  .or. beta_  ==  0.0_dp  .or. beta_  == -1.0_dp)
+
         ! Prepare Lapack arguments.
         n = A%n ; ldx = n ; ldy = n ;
         nrhs =  1 
 
         ! Pointer trick.
         xmat(1:n, 1:nrhs) => x ; ymat(1:n, 1:nrhs) => y
-        call lagtm(op_, n, nrhs, alpha_, A%dl, A%dv, A%du, xmat, ldx, beta_, ymat, ldy)
+        if(is_alpha_special .and. is_beta_special) then
+            call lagtm(op_, n, nrhs, alpha_, A%dl, A%dv, A%du, xmat, ldx, beta_, ymat, ldy)
+        else
+            call glagtm(op_, n, nrhs, alpha_, A%dl, A%dv, A%du, xmat, ldx, beta_, ymat, ldy)
+        end if
     end subroutine
     module subroutine spmv_tridiag_2d_dp(A, x, y, alpha, beta, op)
         type(tridiagonal_dp_type), intent(in) :: A
@@ -604,30 +631,41 @@ submodule (stdlib_specialmatrices) tridiagonal_matrices
         real(dp) :: alpha_, beta_
         integer(ilp) :: n, nrhs, ldx, ldy
         character(1) :: op_
+        logical :: is_alpha_special, is_beta_special
+
 
         ! Deal with optional arguments.
         alpha_ = 1.0_dp ; if (present(alpha)) alpha_ = alpha
         beta_  = 0.0_dp ; if (present(beta))  beta_  = beta
         op_    = "N"        ; if (present(op))    op_    = op
 
+        is_alpha_special = (alpha_ ==  1.0_dp  .or. alpha_ ==  0.0_dp  .or. alpha_ == -1.0_dp)
+        is_beta_special  = (beta_  ==  1.0_dp  .or. beta_  ==  0.0_dp  .or. beta_  == -1.0_dp)
+
         ! Prepare Lapack arguments.
         n = A%n ; ldx = n ; ldy = n ;
         nrhs =  size(x, dim=2, kind=ilp) 
 
-        call lagtm(op_, n, nrhs, alpha_, A%dl, A%dv, A%du, x, ldx, beta_, y, ldy)
+        if(is_alpha_special .and. is_beta_special) then
+            call lagtm(op_, n, nrhs, alpha_, A%dl, A%dv, A%du, x, ldx, beta_, y, ldy)
+        else
+            call glagtm(op_, n, nrhs, alpha_, A%dl, A%dv, A%du, x, ldx, beta_, y, ldy)
+        end if
     end subroutine
     module subroutine spmv_tridiag_1d_csp(A, x, y, alpha, beta, op)
         type(tridiagonal_csp_type), intent(in) :: A
         complex(sp), intent(in), contiguous, target :: x(:)
         complex(sp), intent(inout), contiguous, target :: y(:)
-        real(sp), intent(in), optional :: alpha
-        real(sp), intent(in), optional :: beta
+        complex(sp), intent(in), optional :: alpha
+        complex(sp), intent(in), optional :: beta
         character(1), intent(in), optional :: op
 
         ! Internal variables.
-        real(sp) :: alpha_, beta_
+        complex(sp) :: alpha_, beta_
         integer(ilp) :: n, nrhs, ldx, ldy
         character(1) :: op_
+        logical :: is_alpha_special, is_beta_special
+
         complex(sp), pointer :: xmat(:, :), ymat(:, :)
 
         ! Deal with optional arguments.
@@ -635,50 +673,60 @@ submodule (stdlib_specialmatrices) tridiagonal_matrices
         beta_  = 0.0_sp ; if (present(beta))  beta_  = beta
         op_    = "N"        ; if (present(op))    op_    = op
 
+        is_alpha_special = (alpha_ ==  1.0_sp  .or. alpha_ ==  0.0_sp  .or. alpha_ == -1.0_sp)
+        is_beta_special  = (beta_  ==  1.0_sp  .or. beta_  ==  0.0_sp  .or. beta_  == -1.0_sp)
+
         ! Prepare Lapack arguments.
         n = A%n ; ldx = n ; ldy = n ;
         nrhs =  1 
 
         ! Pointer trick.
         xmat(1:n, 1:nrhs) => x ; ymat(1:n, 1:nrhs) => y
-        call lagtm(op_, n, nrhs, alpha_, A%dl, A%dv, A%du, xmat, ldx, beta_, ymat, ldy)
+        call glagtm(op_, n, nrhs, alpha_, A%dl, A%dv, A%du, xmat, ldx, beta_, ymat, ldy)
     end subroutine
     module subroutine spmv_tridiag_2d_csp(A, x, y, alpha, beta, op)
         type(tridiagonal_csp_type), intent(in) :: A
         complex(sp), intent(in), contiguous, target :: x(:,:)
         complex(sp), intent(inout), contiguous, target :: y(:,:)
-        real(sp), intent(in), optional :: alpha
-        real(sp), intent(in), optional :: beta
+        complex(sp), intent(in), optional :: alpha
+        complex(sp), intent(in), optional :: beta
         character(1), intent(in), optional :: op
 
         ! Internal variables.
-        real(sp) :: alpha_, beta_
+        complex(sp) :: alpha_, beta_
         integer(ilp) :: n, nrhs, ldx, ldy
         character(1) :: op_
+        logical :: is_alpha_special, is_beta_special
+
 
         ! Deal with optional arguments.
         alpha_ = 1.0_sp ; if (present(alpha)) alpha_ = alpha
         beta_  = 0.0_sp ; if (present(beta))  beta_  = beta
         op_    = "N"        ; if (present(op))    op_    = op
 
+        is_alpha_special = (alpha_ ==  1.0_sp  .or. alpha_ ==  0.0_sp  .or. alpha_ == -1.0_sp)
+        is_beta_special  = (beta_  ==  1.0_sp  .or. beta_  ==  0.0_sp  .or. beta_  == -1.0_sp)
+
         ! Prepare Lapack arguments.
         n = A%n ; ldx = n ; ldy = n ;
         nrhs =  size(x, dim=2, kind=ilp) 
 
-        call lagtm(op_, n, nrhs, alpha_, A%dl, A%dv, A%du, x, ldx, beta_, y, ldy)
+        call glagtm(op_, n, nrhs, alpha_, A%dl, A%dv, A%du, x, ldx, beta_, y, ldy)
     end subroutine
     module subroutine spmv_tridiag_1d_cdp(A, x, y, alpha, beta, op)
         type(tridiagonal_cdp_type), intent(in) :: A
         complex(dp), intent(in), contiguous, target :: x(:)
         complex(dp), intent(inout), contiguous, target :: y(:)
-        real(dp), intent(in), optional :: alpha
-        real(dp), intent(in), optional :: beta
+        complex(dp), intent(in), optional :: alpha
+        complex(dp), intent(in), optional :: beta
         character(1), intent(in), optional :: op
 
         ! Internal variables.
-        real(dp) :: alpha_, beta_
+        complex(dp) :: alpha_, beta_
         integer(ilp) :: n, nrhs, ldx, ldy
         character(1) :: op_
+        logical :: is_alpha_special, is_beta_special
+
         complex(dp), pointer :: xmat(:, :), ymat(:, :)
 
         ! Deal with optional arguments.
@@ -686,37 +734,45 @@ submodule (stdlib_specialmatrices) tridiagonal_matrices
         beta_  = 0.0_dp ; if (present(beta))  beta_  = beta
         op_    = "N"        ; if (present(op))    op_    = op
 
+        is_alpha_special = (alpha_ ==  1.0_dp  .or. alpha_ ==  0.0_dp  .or. alpha_ == -1.0_dp)
+        is_beta_special  = (beta_  ==  1.0_dp  .or. beta_  ==  0.0_dp  .or. beta_  == -1.0_dp)
+
         ! Prepare Lapack arguments.
         n = A%n ; ldx = n ; ldy = n ;
         nrhs =  1 
 
         ! Pointer trick.
         xmat(1:n, 1:nrhs) => x ; ymat(1:n, 1:nrhs) => y
-        call lagtm(op_, n, nrhs, alpha_, A%dl, A%dv, A%du, xmat, ldx, beta_, ymat, ldy)
+        call glagtm(op_, n, nrhs, alpha_, A%dl, A%dv, A%du, xmat, ldx, beta_, ymat, ldy)
     end subroutine
     module subroutine spmv_tridiag_2d_cdp(A, x, y, alpha, beta, op)
         type(tridiagonal_cdp_type), intent(in) :: A
         complex(dp), intent(in), contiguous, target :: x(:,:)
         complex(dp), intent(inout), contiguous, target :: y(:,:)
-        real(dp), intent(in), optional :: alpha
-        real(dp), intent(in), optional :: beta
+        complex(dp), intent(in), optional :: alpha
+        complex(dp), intent(in), optional :: beta
         character(1), intent(in), optional :: op
 
         ! Internal variables.
-        real(dp) :: alpha_, beta_
+        complex(dp) :: alpha_, beta_
         integer(ilp) :: n, nrhs, ldx, ldy
         character(1) :: op_
+        logical :: is_alpha_special, is_beta_special
+
 
         ! Deal with optional arguments.
         alpha_ = 1.0_dp ; if (present(alpha)) alpha_ = alpha
         beta_  = 0.0_dp ; if (present(beta))  beta_  = beta
         op_    = "N"        ; if (present(op))    op_    = op
 
+        is_alpha_special = (alpha_ ==  1.0_dp  .or. alpha_ ==  0.0_dp  .or. alpha_ == -1.0_dp)
+        is_beta_special  = (beta_  ==  1.0_dp  .or. beta_  ==  0.0_dp  .or. beta_  == -1.0_dp)
+
         ! Prepare Lapack arguments.
         n = A%n ; ldx = n ; ldy = n ;
         nrhs =  size(x, dim=2, kind=ilp) 
 
-        call lagtm(op_, n, nrhs, alpha_, A%dl, A%dv, A%du, x, ldx, beta_, y, ldy)
+        call glagtm(op_, n, nrhs, alpha_, A%dl, A%dv, A%du, x, ldx, beta_, y, ldy)
     end subroutine
 
     !-------------------------------------

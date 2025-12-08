@@ -7,6 +7,7 @@ module stdlib_specialmatrices
     use stdlib_constants
     use stdlib_linalg_state, only: linalg_state_type, linalg_error_handling, LINALG_ERROR, &
         LINALG_INTERNAL_ERROR, LINALG_VALUE_ERROR
+    use stdlib_extended_lapack_base
     implicit none
     private
     public :: tridiagonal
@@ -307,32 +308,32 @@ module stdlib_specialmatrices
          type(tridiagonal_csp_type), intent(in) :: A
             complex(sp), intent(in), contiguous, target :: x(:)
             complex(sp), intent(inout), contiguous, target :: y(:)
-            real(sp), intent(in), optional :: alpha
-            real(sp), intent(in), optional :: beta
+            complex(sp), intent(in), optional :: alpha
+            complex(sp), intent(in), optional :: beta
             character(1), intent(in), optional :: op
         end subroutine
         module subroutine spmv_tridiag_2d_csp(A, x, y, alpha, beta, op)
          type(tridiagonal_csp_type), intent(in) :: A
             complex(sp), intent(in), contiguous, target :: x(:,:)
             complex(sp), intent(inout), contiguous, target :: y(:,:)
-            real(sp), intent(in), optional :: alpha
-            real(sp), intent(in), optional :: beta
+            complex(sp), intent(in), optional :: alpha
+            complex(sp), intent(in), optional :: beta
             character(1), intent(in), optional :: op
         end subroutine
         module subroutine spmv_tridiag_1d_cdp(A, x, y, alpha, beta, op)
          type(tridiagonal_cdp_type), intent(in) :: A
             complex(dp), intent(in), contiguous, target :: x(:)
             complex(dp), intent(inout), contiguous, target :: y(:)
-            real(dp), intent(in), optional :: alpha
-            real(dp), intent(in), optional :: beta
+            complex(dp), intent(in), optional :: alpha
+            complex(dp), intent(in), optional :: beta
             character(1), intent(in), optional :: op
         end subroutine
         module subroutine spmv_tridiag_2d_cdp(A, x, y, alpha, beta, op)
          type(tridiagonal_cdp_type), intent(in) :: A
             complex(dp), intent(in), contiguous, target :: x(:,:)
             complex(dp), intent(inout), contiguous, target :: y(:,:)
-            real(dp), intent(in), optional :: alpha
-            real(dp), intent(in), optional :: beta
+            complex(dp), intent(in), optional :: alpha
+            complex(dp), intent(in), optional :: beta
             character(1), intent(in), optional :: op
         end subroutine
     end interface
