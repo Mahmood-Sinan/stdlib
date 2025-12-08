@@ -8,7 +8,7 @@ contains
         real(sp), intent(in) :: alpha, beta
         real(sp), intent(inout) :: b(ldb,*)
         real(sp), intent(in) :: d(*), dl(*), du(*), x(ldx,*)
-        
+
         ! Internal variables.
         integer(ilp) :: i, j
         real(sp) :: temp
@@ -61,7 +61,7 @@ contains
         real(dp), intent(in) :: alpha, beta
         real(dp), intent(inout) :: b(ldb,*)
         real(dp), intent(in) :: d(*), dl(*), du(*), x(ldx,*)
-        
+
         ! Internal variables.
         integer(ilp) :: i, j
         real(dp) :: temp
@@ -114,7 +114,7 @@ contains
         complex(sp), intent(in) :: alpha, beta
         complex(sp), intent(inout) :: b(ldb,*)
         complex(sp), intent(in) :: d(*), dl(*), du(*), x(ldx,*)
-        
+
         ! Internal variables.
         integer(ilp) :: i, j
         complex(sp) :: temp
@@ -183,7 +183,7 @@ contains
         complex(dp), intent(in) :: alpha, beta
         complex(dp), intent(inout) :: b(ldb,*)
         complex(dp), intent(in) :: d(*), dl(*), du(*), x(ldx,*)
-        
+
         ! Internal variables.
         integer(ilp) :: i, j
         complex(dp) :: temp
@@ -252,7 +252,7 @@ contains
         real(sp), intent(in) :: alpha, beta
         real(sp), intent(inout) :: b(ldb,*)
         real(sp), intent(in) :: d(*), dl(*), du(*), x(ldx,*)
-        
+
         ! Internal variables.
         integer(ilp64) :: i, j
         real(sp) :: temp
@@ -305,7 +305,7 @@ contains
         real(dp), intent(in) :: alpha, beta
         real(dp), intent(inout) :: b(ldb,*)
         real(dp), intent(in) :: d(*), dl(*), du(*), x(ldx,*)
-        
+
         ! Internal variables.
         integer(ilp64) :: i, j
         real(dp) :: temp
@@ -358,7 +358,7 @@ contains
         complex(sp), intent(in) :: alpha, beta
         complex(sp), intent(inout) :: b(ldb,*)
         complex(sp), intent(in) :: d(*), dl(*), du(*), x(ldx,*)
-        
+
         ! Internal variables.
         integer(ilp64) :: i, j
         complex(sp) :: temp
@@ -427,7 +427,7 @@ contains
         complex(dp), intent(in) :: alpha, beta
         complex(dp), intent(inout) :: b(ldb,*)
         complex(dp), intent(in) :: d(*), dl(*), du(*), x(ldx,*)
-        
+
         ! Internal variables.
         integer(ilp64) :: i, j
         complex(dp) :: temp
