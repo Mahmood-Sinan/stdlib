@@ -47,7 +47,7 @@ contains
                     b(1_ilp, j) = b(1_ilp, j) + alpha * temp
                     do i = 2, n - 1
                         temp = du(i - 1) * x(i - 1, j) + d(i) * x(i, j) + dl(i) * x(i + 1, j)
-                        b(i, j) = b (i, j) + alpha * temp
+                        b(i, j) = b(i, j) + alpha * temp
                     end do
                     temp = du(n - 1) * x(n - 1, j) + d(n) * x(n, j)
                     b(n, j) = b(n, j) + alpha * temp
@@ -100,7 +100,7 @@ contains
                     b(1_ilp, j) = b(1_ilp, j) + alpha * temp
                     do i = 2, n - 1
                         temp = du(i - 1) * x(i - 1, j) + d(i) * x(i, j) + dl(i) * x(i + 1, j)
-                        b(i, j) = b (i, j) + alpha * temp
+                        b(i, j) = b(i, j) + alpha * temp
                     end do
                     temp = du(n - 1) * x(n - 1, j) + d(n) * x(n, j)
                     b(n, j) = b(n, j) + alpha * temp
@@ -169,7 +169,7 @@ contains
                     b(1_ilp, j) = b(1_ilp, j) + alpha * temp
                     do i = 2, n - 1
                         temp = du(i - 1) * x(i - 1, j) + d(i) * x(i, j) + dl(i) * x(i + 1, j)
-                        b(i, j) = b (i, j) + alpha * temp
+                        b(i, j) = b(i, j) + alpha * temp
                     end do
                     temp = du(n - 1) * x(n - 1, j) + d(n) * x(n, j)
                     b(n, j) = b(n, j) + alpha * temp
@@ -238,7 +238,7 @@ contains
                     b(1_ilp, j) = b(1_ilp, j) + alpha * temp
                     do i = 2, n - 1
                         temp = du(i - 1) * x(i - 1, j) + d(i) * x(i, j) + dl(i) * x(i + 1, j)
-                        b(i, j) = b (i, j) + alpha * temp
+                        b(i, j) = b(i, j) + alpha * temp
                     end do
                     temp = du(n - 1) * x(n - 1, j) + d(n) * x(n, j)
                     b(n, j) = b(n, j) + alpha * temp
