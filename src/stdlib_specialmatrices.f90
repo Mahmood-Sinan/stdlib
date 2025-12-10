@@ -7,11 +7,12 @@ module stdlib_specialmatrices
     use stdlib_constants
     use stdlib_linalg_state, only: linalg_state_type, linalg_error_handling, LINALG_ERROR, &
         LINALG_INTERNAL_ERROR, LINALG_VALUE_ERROR
+    use stdlib_extended_lapack_base
     implicit none
     private
     public :: tridiagonal
-    public :: spmv, solve
-    public :: dense, transpose, hermitian, determinant, inverse
+    public :: spmv
+    public :: dense, transpose, hermitian
     public :: operator(*), operator(+), operator(-)
 
     !--------------------------------------
@@ -109,7 +110,7 @@ module stdlib_specialmatrices
             !! Matrix dimension.
             type(tridiagonal_sp_type) :: A
             !! Corresponding Tridiagonal matrix.
-        end function   
+        end function
 
         module function initialize_tridiagonal_impure_sp(dl, dv, du, err) result(A)
             !! Construct a `tridiagonal` matrix from the rank-1 arrays
@@ -132,7 +133,7 @@ module stdlib_specialmatrices
             !! Error handling.
             type(tridiagonal_sp_type) :: A
             !! Corresponding Tridiagonal matrix.
-        end function   
+        end function
         pure module function initialize_tridiagonal_pure_dp(dl, dv, du) result(A)
             !! Construct a `tridiagonal` matrix from the rank-1 arrays
             !! `dl`, `dv` and `du`.
@@ -150,7 +151,7 @@ module stdlib_specialmatrices
             !! Matrix dimension.
             type(tridiagonal_dp_type) :: A
             !! Corresponding Tridiagonal matrix.
-        end function   
+        end function
 
         module function initialize_tridiagonal_impure_dp(dl, dv, du, err) result(A)
             !! Construct a `tridiagonal` matrix from the rank-1 arrays
@@ -173,7 +174,7 @@ module stdlib_specialmatrices
             !! Error handling.
             type(tridiagonal_dp_type) :: A
             !! Corresponding Tridiagonal matrix.
-        end function   
+        end function
         pure module function initialize_tridiagonal_pure_csp(dl, dv, du) result(A)
             !! Construct a `tridiagonal` matrix from the rank-1 arrays
             !! `dl`, `dv` and `du`.
@@ -191,7 +192,7 @@ module stdlib_specialmatrices
             !! Matrix dimension.
             type(tridiagonal_csp_type) :: A
             !! Corresponding Tridiagonal matrix.
-        end function   
+        end function
 
         module function initialize_tridiagonal_impure_csp(dl, dv, du, err) result(A)
             !! Construct a `tridiagonal` matrix from the rank-1 arrays
@@ -214,7 +215,7 @@ module stdlib_specialmatrices
             !! Error handling.
             type(tridiagonal_csp_type) :: A
             !! Corresponding Tridiagonal matrix.
-        end function   
+        end function
         pure module function initialize_tridiagonal_pure_cdp(dl, dv, du) result(A)
             !! Construct a `tridiagonal` matrix from the rank-1 arrays
             !! `dl`, `dv` and `du`.
@@ -232,7 +233,7 @@ module stdlib_specialmatrices
             !! Matrix dimension.
             type(tridiagonal_cdp_type) :: A
             !! Corresponding Tridiagonal matrix.
-        end function   
+        end function
 
         module function initialize_tridiagonal_impure_cdp(dl, dv, du, err) result(A)
             !! Construct a `tridiagonal` matrix from the rank-1 arrays
@@ -255,7 +256,7 @@ module stdlib_specialmatrices
             !! Error handling.
             type(tridiagonal_cdp_type) :: A
             !! Corresponding Tridiagonal matrix.
-        end function   
+        end function
     end interface
 
     !----------------------------------
@@ -307,60 +308,35 @@ module stdlib_specialmatrices
          type(tridiagonal_csp_type), intent(in) :: A
             complex(sp), intent(in), contiguous, target :: x(:)
             complex(sp), intent(inout), contiguous, target :: y(:)
-            real(sp), intent(in), optional :: alpha
-            real(sp), intent(in), optional :: beta
+            complex(sp), intent(in), optional :: alpha
+            complex(sp), intent(in), optional :: beta
             character(1), intent(in), optional :: op
         end subroutine
         module subroutine spmv_tridiag_2d_csp(A, x, y, alpha, beta, op)
          type(tridiagonal_csp_type), intent(in) :: A
             complex(sp), intent(in), contiguous, target :: x(:,:)
             complex(sp), intent(inout), contiguous, target :: y(:,:)
-            real(sp), intent(in), optional :: alpha
-            real(sp), intent(in), optional :: beta
+            complex(sp), intent(in), optional :: alpha
+            complex(sp), intent(in), optional :: beta
             character(1), intent(in), optional :: op
         end subroutine
         module subroutine spmv_tridiag_1d_cdp(A, x, y, alpha, beta, op)
          type(tridiagonal_cdp_type), intent(in) :: A
             complex(dp), intent(in), contiguous, target :: x(:)
             complex(dp), intent(inout), contiguous, target :: y(:)
-            real(dp), intent(in), optional :: alpha
-            real(dp), intent(in), optional :: beta
+            complex(dp), intent(in), optional :: alpha
+            complex(dp), intent(in), optional :: beta
             character(1), intent(in), optional :: op
         end subroutine
         module subroutine spmv_tridiag_2d_cdp(A, x, y, alpha, beta, op)
          type(tridiagonal_cdp_type), intent(in) :: A
             complex(dp), intent(in), contiguous, target :: x(:,:)
             complex(dp), intent(inout), contiguous, target :: y(:,:)
-            real(dp), intent(in), optional :: alpha
-            real(dp), intent(in), optional :: beta
+            complex(dp), intent(in), optional :: alpha
+            complex(dp), intent(in), optional :: beta
             character(1), intent(in), optional :: op
         end subroutine
     end interface
-    
-    ! solve equations of the type A * x = b where A is tridiagonal
-    interface solve
-    module subroutine solve_tridiag_sp(A, b, x)
-        type(tridiagonal_sp_type), intent(in) :: A
-        real(sp), intent(in), contiguous :: b(:,:)
-        real(sp), intent(inout), contiguous, target :: x(:,:)
-    end subroutine
-    module subroutine solve_tridiag_dp(A, b, x)
-        type(tridiagonal_dp_type), intent(in) :: A
-        real(dp), intent(in), contiguous :: b(:,:)
-        real(dp), intent(inout), contiguous, target :: x(:,:)
-    end subroutine
-    module subroutine solve_tridiag_csp(A, b, x)
-        type(tridiagonal_csp_type), intent(in) :: A
-        complex(sp), intent(in), contiguous :: b(:,:)
-        complex(sp), intent(inout), contiguous, target :: x(:,:)
-    end subroutine
-    module subroutine solve_tridiag_cdp(A, b, x)
-        type(tridiagonal_cdp_type), intent(in) :: A
-        complex(dp), intent(in), contiguous :: b(:,:)
-        complex(dp), intent(inout), contiguous, target :: x(:,:)
-    end subroutine
-    end interface
-
 
     !-------------------------------------
     !-----                           -----
@@ -455,43 +431,6 @@ module stdlib_specialmatrices
         end function
     end interface
 
-    interface determinant
-    module function determinant_tridiagonal_sp(A) result(B)
-        type(tridiagonal_sp_type), intent(in) :: A
-        real(sp) :: B
-    end function
-    module function determinant_tridiagonal_dp(A) result(B)
-        type(tridiagonal_dp_type), intent(in) :: A
-        real(dp) :: B
-    end function
-    module function determinant_tridiagonal_csp(A) result(B)
-        type(tridiagonal_csp_type), intent(in) :: A
-        complex(sp) :: B
-    end function
-    module function determinant_tridiagonal_cdp(A) result(B)
-        type(tridiagonal_cdp_type), intent(in) :: A
-        complex(dp) :: B
-    end function
-    end interface
-
-    interface inverse
-    module function inverse_tridiagonal_sp(A) result(B)
-        type(tridiagonal_sp_type), intent(in) :: A
-        real(sp), allocatable :: B(:, :)
-    end function
-    module function inverse_tridiagonal_dp(A) result(B)
-        type(tridiagonal_dp_type), intent(in) :: A
-        real(dp), allocatable :: B(:, :)
-    end function
-    module function inverse_tridiagonal_csp(A) result(B)
-        type(tridiagonal_csp_type), intent(in) :: A
-        complex(sp), allocatable :: B(:, :)
-    end function
-    module function inverse_tridiagonal_cdp(A) result(B)
-        type(tridiagonal_cdp_type), intent(in) :: A
-        complex(dp), allocatable :: B(:, :)
-    end function
-    end interface
     !----------------------------------------
     !-----                              -----
     !-----     ARITHMETIC OPERATORS     -----
