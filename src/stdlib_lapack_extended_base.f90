@@ -1,4 +1,4 @@
-module stdlib_extended_lapack_base
+module stdlib_lapack_extended_base
     use stdlib_linalg_constants
     implicit none
 
