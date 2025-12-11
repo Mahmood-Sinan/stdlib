@@ -1,5 +1,5 @@
 
-submodule(stdlib_extended_lapack_base) stdlib_extended_lapack
+submodule(stdlib_lapack_extended_base) stdlib_lapack_extended
     implicit none
 contains
     pure module subroutine stdlib_glagtm_sp(trans, n, nrhs, alpha, dl, d, du, x, ldx, beta, b, ldb)
@@ -31,7 +31,7 @@ contains
                     b(1_ilp, j) = b(1_ilp, j) + alpha * temp
                     do i = 2, n - 1
                         temp = dl(i - 1) * x(i - 1, j) + d(i) * x(i, j) + du(i) * x(i + 1, j)
-                        b(i, j) = b (i, j) + alpha * temp
+                        b(i, j) = b(i, j) + alpha * temp
                     end do
                     temp = dl(n - 1) * x(n - 1, j) + d(n) * x(n, j)
                     b(n, j) = b(n, j) + alpha * temp
@@ -84,7 +84,7 @@ contains
                     b(1_ilp, j) = b(1_ilp, j) + alpha * temp
                     do i = 2, n - 1
                         temp = dl(i - 1) * x(i - 1, j) + d(i) * x(i, j) + du(i) * x(i + 1, j)
-                        b(i, j) = b (i, j) + alpha * temp
+                        b(i, j) = b(i, j) + alpha * temp
                     end do
                     temp = dl(n - 1) * x(n - 1, j) + d(n) * x(n, j)
                     b(n, j) = b(n, j) + alpha * temp
@@ -137,7 +137,7 @@ contains
                     b(1_ilp, j) = b(1_ilp, j) + alpha * temp
                     do i = 2, n - 1
                         temp = dl(i - 1) * x(i - 1, j) + d(i) * x(i, j) + du(i) * x(i + 1, j)
-                        b(i, j) = b (i, j) + alpha * temp
+                        b(i, j) = b(i, j) + alpha * temp
                     end do
                     temp = dl(n - 1) * x(n - 1, j) + d(n) * x(n, j)
                     b(n, j) = b(n, j) + alpha * temp
@@ -206,7 +206,7 @@ contains
                     b(1_ilp, j) = b(1_ilp, j) + alpha * temp
                     do i = 2, n - 1
                         temp = dl(i - 1) * x(i - 1, j) + d(i) * x(i, j) + du(i) * x(i + 1, j)
-                        b(i, j) = b (i, j) + alpha * temp
+                        b(i, j) = b(i, j) + alpha * temp
                     end do
                     temp = dl(n - 1) * x(n - 1, j) + d(n) * x(n, j)
                     b(n, j) = b(n, j) + alpha * temp

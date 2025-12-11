@@ -534,7 +534,6 @@ submodule (stdlib_specialmatrices) tridiagonal_matrices
         alpha_ = 1.0_sp ; if (present(alpha)) alpha_ = alpha
         beta_  = 0.0_sp ; if (present(beta))  beta_  = beta
         op_    = "N"        ; if (present(op))    op_    = op
-
         is_alpha_special = (alpha_ ==  1.0_sp  .or. alpha_ ==  0.0_sp  .or. alpha_ == -1.0_sp)
         is_beta_special  = (beta_  ==  1.0_sp  .or. beta_  ==  0.0_sp  .or. beta_  == -1.0_sp)
 
@@ -569,7 +568,6 @@ submodule (stdlib_specialmatrices) tridiagonal_matrices
         alpha_ = 1.0_sp ; if (present(alpha)) alpha_ = alpha
         beta_  = 0.0_sp ; if (present(beta))  beta_  = beta
         op_    = "N"        ; if (present(op))    op_    = op
-
         is_alpha_special = (alpha_ ==  1.0_sp  .or. alpha_ ==  0.0_sp  .or. alpha_ == -1.0_sp)
         is_beta_special  = (beta_  ==  1.0_sp  .or. beta_  ==  0.0_sp  .or. beta_  == -1.0_sp)
 
@@ -603,7 +601,6 @@ submodule (stdlib_specialmatrices) tridiagonal_matrices
         alpha_ = 1.0_dp ; if (present(alpha)) alpha_ = alpha
         beta_  = 0.0_dp ; if (present(beta))  beta_  = beta
         op_    = "N"        ; if (present(op))    op_    = op
-
         is_alpha_special = (alpha_ ==  1.0_dp  .or. alpha_ ==  0.0_dp  .or. alpha_ == -1.0_dp)
         is_beta_special  = (beta_  ==  1.0_dp  .or. beta_  ==  0.0_dp  .or. beta_  == -1.0_dp)
 
@@ -638,7 +635,6 @@ submodule (stdlib_specialmatrices) tridiagonal_matrices
         alpha_ = 1.0_dp ; if (present(alpha)) alpha_ = alpha
         beta_  = 0.0_dp ; if (present(beta))  beta_  = beta
         op_    = "N"        ; if (present(op))    op_    = op
-
         is_alpha_special = (alpha_ ==  1.0_dp  .or. alpha_ ==  0.0_dp  .or. alpha_ == -1.0_dp)
         is_beta_special  = (beta_  ==  1.0_dp  .or. beta_  ==  0.0_dp  .or. beta_  == -1.0_dp)
 
@@ -664,7 +660,6 @@ submodule (stdlib_specialmatrices) tridiagonal_matrices
         complex(sp) :: alpha_, beta_
         integer(ilp) :: n, nrhs, ldx, ldy
         character(1) :: op_
-        logical :: is_alpha_special, is_beta_special
 
         complex(sp), pointer :: xmat(:, :), ymat(:, :)
 
@@ -672,9 +667,6 @@ submodule (stdlib_specialmatrices) tridiagonal_matrices
         alpha_ = 1.0_sp ; if (present(alpha)) alpha_ = alpha
         beta_  = 0.0_sp ; if (present(beta))  beta_  = beta
         op_    = "N"        ; if (present(op))    op_    = op
-
-        is_alpha_special = (alpha_ ==  1.0_sp  .or. alpha_ ==  0.0_sp  .or. alpha_ == -1.0_sp)
-        is_beta_special  = (beta_  ==  1.0_sp  .or. beta_  ==  0.0_sp  .or. beta_  == -1.0_sp)
 
         ! Prepare Lapack arguments.
         n = A%n ; ldx = n ; ldy = n ;
@@ -696,16 +688,12 @@ submodule (stdlib_specialmatrices) tridiagonal_matrices
         complex(sp) :: alpha_, beta_
         integer(ilp) :: n, nrhs, ldx, ldy
         character(1) :: op_
-        logical :: is_alpha_special, is_beta_special
 
 
         ! Deal with optional arguments.
         alpha_ = 1.0_sp ; if (present(alpha)) alpha_ = alpha
         beta_  = 0.0_sp ; if (present(beta))  beta_  = beta
         op_    = "N"        ; if (present(op))    op_    = op
-
-        is_alpha_special = (alpha_ ==  1.0_sp  .or. alpha_ ==  0.0_sp  .or. alpha_ == -1.0_sp)
-        is_beta_special  = (beta_  ==  1.0_sp  .or. beta_  ==  0.0_sp  .or. beta_  == -1.0_sp)
 
         ! Prepare Lapack arguments.
         n = A%n ; ldx = n ; ldy = n ;
@@ -725,7 +713,6 @@ submodule (stdlib_specialmatrices) tridiagonal_matrices
         complex(dp) :: alpha_, beta_
         integer(ilp) :: n, nrhs, ldx, ldy
         character(1) :: op_
-        logical :: is_alpha_special, is_beta_special
 
         complex(dp), pointer :: xmat(:, :), ymat(:, :)
 
@@ -733,9 +720,6 @@ submodule (stdlib_specialmatrices) tridiagonal_matrices
         alpha_ = 1.0_dp ; if (present(alpha)) alpha_ = alpha
         beta_  = 0.0_dp ; if (present(beta))  beta_  = beta
         op_    = "N"        ; if (present(op))    op_    = op
-
-        is_alpha_special = (alpha_ ==  1.0_dp  .or. alpha_ ==  0.0_dp  .or. alpha_ == -1.0_dp)
-        is_beta_special  = (beta_  ==  1.0_dp  .or. beta_  ==  0.0_dp  .or. beta_  == -1.0_dp)
 
         ! Prepare Lapack arguments.
         n = A%n ; ldx = n ; ldy = n ;
@@ -757,16 +741,12 @@ submodule (stdlib_specialmatrices) tridiagonal_matrices
         complex(dp) :: alpha_, beta_
         integer(ilp) :: n, nrhs, ldx, ldy
         character(1) :: op_
-        logical :: is_alpha_special, is_beta_special
 
 
         ! Deal with optional arguments.
         alpha_ = 1.0_dp ; if (present(alpha)) alpha_ = alpha
         beta_  = 0.0_dp ; if (present(beta))  beta_  = beta
         op_    = "N"        ; if (present(op))    op_    = op
-
-        is_alpha_special = (alpha_ ==  1.0_dp  .or. alpha_ ==  0.0_dp  .or. alpha_ == -1.0_dp)
-        is_beta_special  = (beta_  ==  1.0_dp  .or. beta_  ==  0.0_dp  .or. beta_  == -1.0_dp)
 
         ! Prepare Lapack arguments.
         n = A%n ; ldx = n ; ldy = n ;
