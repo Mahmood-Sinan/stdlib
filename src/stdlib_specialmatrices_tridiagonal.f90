@@ -53,6 +53,7 @@ submodule (stdlib_specialmatrices) tridiagonal_matrices
         !! Corresponding tridiagonal matrix.
 
         ! Internal variables.
+        integer(ilp) :: i
         type(linalg_state_type) :: err0
 
         ! Description of the matrix.
@@ -116,6 +117,7 @@ submodule (stdlib_specialmatrices) tridiagonal_matrices
         !! Corresponding tridiagonal matrix.
 
         ! Internal variables.
+        integer(ilp) :: i
         type(linalg_state_type) :: err0
 
         if (n <= 0) then
@@ -175,6 +177,7 @@ submodule (stdlib_specialmatrices) tridiagonal_matrices
         !! Corresponding tridiagonal matrix.
 
         ! Internal variables.
+        integer(ilp) :: i
         type(linalg_state_type) :: err0
 
         ! Description of the matrix.
@@ -238,6 +241,7 @@ submodule (stdlib_specialmatrices) tridiagonal_matrices
         !! Corresponding tridiagonal matrix.
 
         ! Internal variables.
+        integer(ilp) :: i
         type(linalg_state_type) :: err0
 
         if (n <= 0) then
@@ -297,6 +301,7 @@ submodule (stdlib_specialmatrices) tridiagonal_matrices
         !! Corresponding tridiagonal matrix.
 
         ! Internal variables.
+        integer(ilp) :: i
         type(linalg_state_type) :: err0
 
         ! Description of the matrix.
@@ -360,6 +365,7 @@ submodule (stdlib_specialmatrices) tridiagonal_matrices
         !! Corresponding tridiagonal matrix.
 
         ! Internal variables.
+        integer(ilp) :: i
         type(linalg_state_type) :: err0
 
         if (n <= 0) then
@@ -419,6 +425,7 @@ submodule (stdlib_specialmatrices) tridiagonal_matrices
         !! Corresponding tridiagonal matrix.
 
         ! Internal variables.
+        integer(ilp) :: i
         type(linalg_state_type) :: err0
 
         ! Description of the matrix.
@@ -482,6 +489,7 @@ submodule (stdlib_specialmatrices) tridiagonal_matrices
         !! Corresponding tridiagonal matrix.
 
         ! Internal variables.
+        integer(ilp) :: i
         type(linalg_state_type) :: err0
 
         if (n <= 0) then
