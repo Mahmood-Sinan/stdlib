@@ -482,6 +482,164 @@ module stdlib_specialmatrices
         end function
     end interface
 
+    interface build_tridiagonal
+    pure module subroutine build_tridiagonal_from_arrays_sp(dl, dv, du, A, err)
+        real(sp), intent(in) :: dl(:), dv(:), du(:)
+        type(tridiagonal_sp_type), intent(out) :: A
+        type(linalg_state_type), intent(out), optional :: err
+
+        ! Internal variables.
+        integer(ilp) :: n
+        type(linalg_state_type) :: err0
+    end subroutine
+
+    pure module subroutine build_tridiagonal_from_constants_sp(dl, dv, du, n, A, err)
+        real(sp), intent(in) :: dl, dv, du
+        integer(ilp), intent(in) :: n
+        type(tridiagonal_sp_type), intent(out) :: A
+        type(linalg_state_type), intent(out), optional :: err
+
+        ! Internal variables.
+        type(linalg_state_type) :: err0
+    end subroutine
+    pure module subroutine build_tridiagonal_from_arrays_dp(dl, dv, du, A, err)
+        real(dp), intent(in) :: dl(:), dv(:), du(:)
+        type(tridiagonal_dp_type), intent(out) :: A
+        type(linalg_state_type), intent(out), optional :: err
+
+        ! Internal variables.
+        integer(ilp) :: n
+        type(linalg_state_type) :: err0
+    end subroutine
+
+    pure module subroutine build_tridiagonal_from_constants_dp(dl, dv, du, n, A, err)
+        real(dp), intent(in) :: dl, dv, du
+        integer(ilp), intent(in) :: n
+        type(tridiagonal_dp_type), intent(out) :: A
+        type(linalg_state_type), intent(out), optional :: err
+
+        ! Internal variables.
+        type(linalg_state_type) :: err0
+    end subroutine
+    pure module subroutine build_tridiagonal_from_arrays_csp(dl, dv, du, A, err)
+        complex(sp), intent(in) :: dl(:), dv(:), du(:)
+        type(tridiagonal_csp_type), intent(out) :: A
+        type(linalg_state_type), intent(out), optional :: err
+
+        ! Internal variables.
+        integer(ilp) :: n
+        type(linalg_state_type) :: err0
+    end subroutine
+
+    pure module subroutine build_tridiagonal_from_constants_csp(dl, dv, du, n, A, err)
+        complex(sp), intent(in) :: dl, dv, du
+        integer(ilp), intent(in) :: n
+        type(tridiagonal_csp_type), intent(out) :: A
+        type(linalg_state_type), intent(out), optional :: err
+
+        ! Internal variables.
+        type(linalg_state_type) :: err0
+    end subroutine
+    pure module subroutine build_tridiagonal_from_arrays_cdp(dl, dv, du, A, err)
+        complex(dp), intent(in) :: dl(:), dv(:), du(:)
+        type(tridiagonal_cdp_type), intent(out) :: A
+        type(linalg_state_type), intent(out), optional :: err
+
+        ! Internal variables.
+        integer(ilp) :: n
+        type(linalg_state_type) :: err0
+    end subroutine
+
+    pure module subroutine build_tridiagonal_from_constants_cdp(dl, dv, du, n, A, err)
+        complex(dp), intent(in) :: dl, dv, du
+        integer(ilp), intent(in) :: n
+        type(tridiagonal_cdp_type), intent(out) :: A
+        type(linalg_state_type), intent(out), optional :: err
+
+        ! Internal variables.
+        type(linalg_state_type) :: err0
+    end subroutine
+    end interface
+
+    interface build_sym_tridiagonal
+    pure module subroutine build_sym_tridiagonal_from_arrays_sp(du, dv, A, err)
+        real(sp), intent(in) :: du(:), dv(:)
+        type(sym_tridiagonal_sp_type), intent(out) :: A
+        type(linalg_state_type), intent(out), optional :: err
+
+        ! Internal variables.
+        integer(ilp) :: n
+        type(linalg_state_type) :: err0
+    end subroutine
+
+    pure module subroutine build_sym_tridiagonal_from_constants_sp(du, dv, n, A, err)
+        real(sp), intent(in) :: du, dv
+        integer(ilp), intent(in) :: n
+        type(sym_tridiagonal_sp_type), intent(out) :: A
+        type(linalg_state_type), intent(out), optional :: err
+
+        ! Internal variables.
+        type(linalg_state_type) :: err0
+    end subroutine
+    pure module subroutine build_sym_tridiagonal_from_arrays_dp(du, dv, A, err)
+        real(dp), intent(in) :: du(:), dv(:)
+        type(sym_tridiagonal_dp_type), intent(out) :: A
+        type(linalg_state_type), intent(out), optional :: err
+
+        ! Internal variables.
+        integer(ilp) :: n
+        type(linalg_state_type) :: err0
+    end subroutine
+
+    pure module subroutine build_sym_tridiagonal_from_constants_dp(du, dv, n, A, err)
+        real(dp), intent(in) :: du, dv
+        integer(ilp), intent(in) :: n
+        type(sym_tridiagonal_dp_type), intent(out) :: A
+        type(linalg_state_type), intent(out), optional :: err
+
+        ! Internal variables.
+        type(linalg_state_type) :: err0
+    end subroutine
+    pure module subroutine build_sym_tridiagonal_from_arrays_csp(du, dv, A, err)
+        complex(sp), intent(in) :: du(:), dv(:)
+        type(sym_tridiagonal_csp_type), intent(out) :: A
+        type(linalg_state_type), intent(out), optional :: err
+
+        ! Internal variables.
+        integer(ilp) :: n
+        type(linalg_state_type) :: err0
+    end subroutine
+
+    pure module subroutine build_sym_tridiagonal_from_constants_csp(du, dv, n, A, err)
+        complex(sp), intent(in) :: du, dv
+        integer(ilp), intent(in) :: n
+        type(sym_tridiagonal_csp_type), intent(out) :: A
+        type(linalg_state_type), intent(out), optional :: err
+
+        ! Internal variables.
+        type(linalg_state_type) :: err0
+    end subroutine
+    pure module subroutine build_sym_tridiagonal_from_arrays_cdp(du, dv, A, err)
+        complex(dp), intent(in) :: du(:), dv(:)
+        type(sym_tridiagonal_cdp_type), intent(out) :: A
+        type(linalg_state_type), intent(out), optional :: err
+
+        ! Internal variables.
+        integer(ilp) :: n
+        type(linalg_state_type) :: err0
+    end subroutine
+
+    pure module subroutine build_sym_tridiagonal_from_constants_cdp(du, dv, n, A, err)
+        complex(dp), intent(in) :: du, dv
+        integer(ilp), intent(in) :: n
+        type(sym_tridiagonal_cdp_type), intent(out) :: A
+        type(linalg_state_type), intent(out), optional :: err
+
+        ! Internal variables.
+        type(linalg_state_type) :: err0
+    end subroutine
+    end interface
+
     !----------------------------------
     !-----                        -----
     !-----     LINEAR ALGEBRA     -----
