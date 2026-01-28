@@ -220,27 +220,15 @@ submodule (stdlib_specialmatrices) tridiagonal_matrices
         n = size(dv, kind=ilp)
         if (n <= 0) then
             err0 = linalg_state_type(this, LINALG_VALUE_ERROR, "Matrix size needs to be positive, n = ", n, ".")
-            if(present(err)) then
-                call linalg_error_handling(err0, err)
-            else
-                call linalg_error_handling(err0)
-            end if
+            call linalg_error_handling(err0, err)
         endif
         if (size(dl, kind=ilp) /= n-1) then
             err0 = linalg_state_type(this, LINALG_VALUE_ERROR, "Vector dl does not have the correct length.")
-            if(present(err)) then
-                call linalg_error_handling(err0, err)
-            else
-                call linalg_error_handling(err0)
-            end if
+            call linalg_error_handling(err0, err)
         endif
         if (size(du, kind=ilp) /= n-1) then
             err0 = linalg_state_type(this, LINALG_VALUE_ERROR, "Vector du does not have the correct length.")
-            if(present(err)) then
-                call linalg_error_handling(err0, err)
-            else
-                call linalg_error_handling(err0)
-            end if
+            call linalg_error_handling(err0, err)
         endif
 
         if(err0%ok()) then
@@ -262,11 +250,7 @@ submodule (stdlib_specialmatrices) tridiagonal_matrices
 
         if (n <= 0) then
             err0 = linalg_state_type(this, LINALG_VALUE_ERROR, "Matrix size needs to be positive, n = ", n, ".")
-            if(present(err)) then
-                call linalg_error_handling(err0, err)
-            else
-                call linalg_error_handling(err0)
-            end if
+            call linalg_error_handling(err0, err)
         endif
 
         if(err0%ok()) then
@@ -291,27 +275,15 @@ submodule (stdlib_specialmatrices) tridiagonal_matrices
         n = size(dv, kind=ilp)
         if (n <= 0) then
             err0 = linalg_state_type(this, LINALG_VALUE_ERROR, "Matrix size needs to be positive, n = ", n, ".")
-            if(present(err)) then
-                call linalg_error_handling(err0, err)
-            else
-                call linalg_error_handling(err0)
-            end if
+            call linalg_error_handling(err0, err)
         endif
         if (size(dl, kind=ilp) /= n-1) then
             err0 = linalg_state_type(this, LINALG_VALUE_ERROR, "Vector dl does not have the correct length.")
-            if(present(err)) then
-                call linalg_error_handling(err0, err)
-            else
-                call linalg_error_handling(err0)
-            end if
+            call linalg_error_handling(err0, err)
         endif
         if (size(du, kind=ilp) /= n-1) then
             err0 = linalg_state_type(this, LINALG_VALUE_ERROR, "Vector du does not have the correct length.")
-            if(present(err)) then
-                call linalg_error_handling(err0, err)
-            else
-                call linalg_error_handling(err0)
-            end if
+            call linalg_error_handling(err0, err)
         endif
 
         if(err0%ok()) then
@@ -333,11 +305,7 @@ submodule (stdlib_specialmatrices) tridiagonal_matrices
 
         if (n <= 0) then
             err0 = linalg_state_type(this, LINALG_VALUE_ERROR, "Matrix size needs to be positive, n = ", n, ".")
-            if(present(err)) then
-                call linalg_error_handling(err0, err)
-            else
-                call linalg_error_handling(err0)
-            end if
+            call linalg_error_handling(err0, err)
         endif
 
         if(err0%ok()) then
@@ -362,27 +330,15 @@ submodule (stdlib_specialmatrices) tridiagonal_matrices
         n = size(dv, kind=ilp)
         if (n <= 0) then
             err0 = linalg_state_type(this, LINALG_VALUE_ERROR, "Matrix size needs to be positive, n = ", n, ".")
-            if(present(err)) then
-                call linalg_error_handling(err0, err)
-            else
-                call linalg_error_handling(err0)
-            end if
+            call linalg_error_handling(err0, err)
         endif
         if (size(dl, kind=ilp) /= n-1) then
             err0 = linalg_state_type(this, LINALG_VALUE_ERROR, "Vector dl does not have the correct length.")
-            if(present(err)) then
-                call linalg_error_handling(err0, err)
-            else
-                call linalg_error_handling(err0)
-            end if
+            call linalg_error_handling(err0, err)
         endif
         if (size(du, kind=ilp) /= n-1) then
             err0 = linalg_state_type(this, LINALG_VALUE_ERROR, "Vector du does not have the correct length.")
-            if(present(err)) then
-                call linalg_error_handling(err0, err)
-            else
-                call linalg_error_handling(err0)
-            end if
+            call linalg_error_handling(err0, err)
         endif
 
         if(err0%ok()) then
@@ -404,11 +360,7 @@ submodule (stdlib_specialmatrices) tridiagonal_matrices
 
         if (n <= 0) then
             err0 = linalg_state_type(this, LINALG_VALUE_ERROR, "Matrix size needs to be positive, n = ", n, ".")
-            if(present(err)) then
-                call linalg_error_handling(err0, err)
-            else
-                call linalg_error_handling(err0)
-            end if
+            call linalg_error_handling(err0, err)
         endif
 
         if(err0%ok()) then
@@ -433,27 +385,15 @@ submodule (stdlib_specialmatrices) tridiagonal_matrices
         n = size(dv, kind=ilp)
         if (n <= 0) then
             err0 = linalg_state_type(this, LINALG_VALUE_ERROR, "Matrix size needs to be positive, n = ", n, ".")
-            if(present(err)) then
-                call linalg_error_handling(err0, err)
-            else
-                call linalg_error_handling(err0)
-            end if
+            call linalg_error_handling(err0, err)
         endif
         if (size(dl, kind=ilp) /= n-1) then
             err0 = linalg_state_type(this, LINALG_VALUE_ERROR, "Vector dl does not have the correct length.")
-            if(present(err)) then
-                call linalg_error_handling(err0, err)
-            else
-                call linalg_error_handling(err0)
-            end if
+            call linalg_error_handling(err0, err)
         endif
         if (size(du, kind=ilp) /= n-1) then
             err0 = linalg_state_type(this, LINALG_VALUE_ERROR, "Vector du does not have the correct length.")
-            if(present(err)) then
-                call linalg_error_handling(err0, err)
-            else
-                call linalg_error_handling(err0)
-            end if
+            call linalg_error_handling(err0, err)
         endif
 
         if(err0%ok()) then
@@ -475,11 +415,7 @@ submodule (stdlib_specialmatrices) tridiagonal_matrices
 
         if (n <= 0) then
             err0 = linalg_state_type(this, LINALG_VALUE_ERROR, "Matrix size needs to be positive, n = ", n, ".")
-            if(present(err)) then
-                call linalg_error_handling(err0, err)
-            else
-                call linalg_error_handling(err0)
-            end if
+            call linalg_error_handling(err0, err)
         endif
 
         if(err0%ok()) then
