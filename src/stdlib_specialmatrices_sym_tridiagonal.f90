@@ -456,6 +456,7 @@ submodule (stdlib_specialmatrices) sym_tridiagonal_matrices
         character(1) :: op_
         logical :: is_alpha_special, is_beta_special
 
+        real(sp), pointer :: xmat(:, :), ymat(:, :)
 
         ! Deal with optional arguments.
         alpha_ = 1.0_sp ; if (present(alpha)) alpha_ = alpha
@@ -468,10 +469,12 @@ submodule (stdlib_specialmatrices) sym_tridiagonal_matrices
         n = A%n ; ldx = n ; ldy = n ;
         nrhs =  size(x, dim=2, kind=ilp) 
 
+        ! Pointer trick.
+        xmat(1:n, 1:nrhs) => x ; ymat(1:n, 1:nrhs) => y
         if(is_alpha_special .and. is_beta_special) then
-            call lagtm(op_, n, nrhs, alpha_, A%du, A%dv, A%du, x, ldx, beta_, y, ldy)
+            call lagtm(op_, n, nrhs, alpha_, A%du, A%dv, A%du, xmat, ldx, beta_, ymat, ldy)
         else
-            call glagtm(op_, n, nrhs, alpha_, A%du, A%dv, A%du, x, ldx, beta_, y, ldy)
+            call glagtm(op_, n, nrhs, alpha_, A%du, A%dv, A%du, xmat, ldx, beta_, ymat, ldy)
         end if
     end subroutine
     module subroutine spmv_sym_tridiag_1d_dp(A, x, y, alpha, beta, op)
@@ -523,6 +526,7 @@ submodule (stdlib_specialmatrices) sym_tridiagonal_matrices
         character(1) :: op_
         logical :: is_alpha_special, is_beta_special
 
+        real(dp), pointer :: xmat(:, :), ymat(:, :)
 
         ! Deal with optional arguments.
         alpha_ = 1.0_dp ; if (present(alpha)) alpha_ = alpha
@@ -535,10 +539,12 @@ submodule (stdlib_specialmatrices) sym_tridiagonal_matrices
         n = A%n ; ldx = n ; ldy = n ;
         nrhs =  size(x, dim=2, kind=ilp) 
 
+        ! Pointer trick.
+        xmat(1:n, 1:nrhs) => x ; ymat(1:n, 1:nrhs) => y
         if(is_alpha_special .and. is_beta_special) then
-            call lagtm(op_, n, nrhs, alpha_, A%du, A%dv, A%du, x, ldx, beta_, y, ldy)
+            call lagtm(op_, n, nrhs, alpha_, A%du, A%dv, A%du, xmat, ldx, beta_, ymat, ldy)
         else
-            call glagtm(op_, n, nrhs, alpha_, A%du, A%dv, A%du, x, ldx, beta_, y, ldy)
+            call glagtm(op_, n, nrhs, alpha_, A%du, A%dv, A%du, xmat, ldx, beta_, ymat, ldy)
         end if
     end subroutine
     module subroutine spmv_sym_tridiag_1d_csp(A, x, y, alpha, beta, op)
@@ -582,6 +588,7 @@ submodule (stdlib_specialmatrices) sym_tridiagonal_matrices
         integer(ilp) :: n, nrhs, ldx, ldy
         character(1) :: op_
 
+        complex(sp), pointer :: xmat(:, :), ymat(:, :)
 
         ! Deal with optional arguments.
         alpha_ = 1.0_sp ; if (present(alpha)) alpha_ = alpha
@@ -592,7 +599,9 @@ submodule (stdlib_specialmatrices) sym_tridiagonal_matrices
         n = A%n ; ldx = n ; ldy = n ;
         nrhs =  size(x, dim=2, kind=ilp) 
 
-        call glagtm(op_, n, nrhs, alpha_, A%du, A%dv, A%du, x, ldx, beta_, y, ldy)
+        ! Pointer trick.
+        xmat(1:n, 1:nrhs) => x ; ymat(1:n, 1:nrhs) => y
+        call glagtm(op_, n, nrhs, alpha_, A%du, A%dv, A%du, xmat, ldx, beta_, ymat, ldy)
     end subroutine
     module subroutine spmv_sym_tridiag_1d_cdp(A, x, y, alpha, beta, op)
         type(sym_tridiagonal_cdp_type), intent(in) :: A
@@ -635,6 +644,7 @@ submodule (stdlib_specialmatrices) sym_tridiagonal_matrices
         integer(ilp) :: n, nrhs, ldx, ldy
         character(1) :: op_
 
+        complex(dp), pointer :: xmat(:, :), ymat(:, :)
 
         ! Deal with optional arguments.
         alpha_ = 1.0_dp ; if (present(alpha)) alpha_ = alpha
@@ -645,7 +655,9 @@ submodule (stdlib_specialmatrices) sym_tridiagonal_matrices
         n = A%n ; ldx = n ; ldy = n ;
         nrhs =  size(x, dim=2, kind=ilp) 
 
-        call glagtm(op_, n, nrhs, alpha_, A%du, A%dv, A%du, x, ldx, beta_, y, ldy)
+        ! Pointer trick.
+        xmat(1:n, 1:nrhs) => x ; ymat(1:n, 1:nrhs) => y
+        call glagtm(op_, n, nrhs, alpha_, A%du, A%dv, A%du, xmat, ldx, beta_, ymat, ldy)
     end subroutine
 
     !-------------------------------------
