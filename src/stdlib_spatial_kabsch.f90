@@ -292,7 +292,6 @@ contains
         real(sp) :: sum_w, variance_p
         real(sp), allocatable :: S(:)
         logical :: scale_
-        complex(sp) :: detR
 
         ! Dimension checks
         if(size(P,dim=1)/=size(Q,dim=1) .or. size(P,dim=1)/=size(R,dim=1) .or. size(P,dim=1)/=size(R,dim=2) &
@@ -425,7 +424,6 @@ contains
         real(dp) :: sum_w, variance_p
         real(dp), allocatable :: S(:)
         logical :: scale_
-        complex(dp) :: detR
 
         ! Dimension checks
         if(size(P,dim=1)/=size(Q,dim=1) .or. size(P,dim=1)/=size(R,dim=1) .or. size(P,dim=1)/=size(R,dim=2) &
