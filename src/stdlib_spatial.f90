@@ -57,5 +57,41 @@ module stdlib_spatial
             !> Enable scaling
             logical, intent(in), optional :: scale
         end subroutine
+        module subroutine kabsch_csp(P, Q, R, t, c, rmsd, W, scale)
+            !> Reference point set (d × N)
+            complex(sp), intent(in) :: P(:, :)
+            !> Target point set (d × N)
+            complex(sp), intent(in) :: Q(:, :)
+            !> Optimal rotation matrix (d × d)
+            complex(sp), intent(out) :: R(:,:)
+            !> Translation vector (d)
+            complex(sp), intent(out) :: t(:)
+            !> Scale factor
+            complex(sp), intent(out) :: c
+            !> Root-mean-square deviation
+            real(sp), intent(out) :: rmsd
+            !> Optional weights
+            real(sp), intent(in), optional :: W(:)
+            !> Enable scaling
+            logical, intent(in), optional :: scale
+        end subroutine
+        module subroutine kabsch_cdp(P, Q, R, t, c, rmsd, W, scale)
+            !> Reference point set (d × N)
+            complex(dp), intent(in) :: P(:, :)
+            !> Target point set (d × N)
+            complex(dp), intent(in) :: Q(:, :)
+            !> Optimal rotation matrix (d × d)
+            complex(dp), intent(out) :: R(:,:)
+            !> Translation vector (d)
+            complex(dp), intent(out) :: t(:)
+            !> Scale factor
+            complex(dp), intent(out) :: c
+            !> Root-mean-square deviation
+            real(dp), intent(out) :: rmsd
+            !> Optional weights
+            real(dp), intent(in), optional :: W(:)
+            !> Enable scaling
+            logical, intent(in), optional :: scale
+        end subroutine
     end interface
 end module stdlib_spatial
