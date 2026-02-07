@@ -1,4 +1,6 @@
 submodule(stdlib_spatial) stdlib_spatial_kabsch
+    use stdlib_linalg, only: svd, det, eye
+    use stdlib_intrinsics, only: stdlib_sum
 
 contains
     module subroutine kabsch_sp(P, Q, R, t, c, rmsd, W, scale)
@@ -30,14 +32,14 @@ contains
         ! Dimension checks
         if(size(P,dim=1)/=size(Q,dim=1) .or. size(P,dim=1)/=size(R,dim=1) .or. size(P,dim=1)/=size(R,dim=2) &
                     .or. size(P,dim=1)/=size(t)) then
-            error stop "array sizes do not match"
+            call error_stop("array sizes do not match")
         end if
         if(size(P,dim=2)/=size(Q,dim=2)) then
-            error stop "array sizes do not match"
+            call error_stop("array sizes do not match")
         end if
         if (present(W)) then
             if (size(W) /= size(P,dim=2)) then
-                error stop "array sizes do not match"
+                call error_stop("array sizes do not match")
             end if
         end if
         d = size(P,dim=1)
@@ -162,14 +164,14 @@ contains
         ! Dimension checks
         if(size(P,dim=1)/=size(Q,dim=1) .or. size(P,dim=1)/=size(R,dim=1) .or. size(P,dim=1)/=size(R,dim=2) &
                     .or. size(P,dim=1)/=size(t)) then
-            error stop "array sizes do not match"
+            call error_stop("array sizes do not match")
         end if
         if(size(P,dim=2)/=size(Q,dim=2)) then
-            error stop "array sizes do not match"
+            call error_stop("array sizes do not match")
         end if
         if (present(W)) then
             if (size(W) /= size(P,dim=2)) then
-                error stop "array sizes do not match"
+                call error_stop("array sizes do not match")
             end if
         end if
         d = size(P,dim=1)
@@ -295,14 +297,14 @@ contains
         ! Dimension checks
         if(size(P,dim=1)/=size(Q,dim=1) .or. size(P,dim=1)/=size(R,dim=1) .or. size(P,dim=1)/=size(R,dim=2) &
                     .or. size(P,dim=1)/=size(t)) then
-            error stop "array sizes do not match"
+            call error_stop("array sizes do not match")
         end if
         if(size(P,dim=2)/=size(Q,dim=2)) then
-            error stop "array sizes do not match"
+            call error_stop("array sizes do not match")
         end if
         if (present(W)) then
             if (size(W) /= size(P,dim=2)) then
-                error stop "array sizes do not match"
+                call error_stop("array sizes do not match")
             end if
         end if
         d = size(P,dim=1)
@@ -310,8 +312,8 @@ contains
         scale_ = .true.
         if(present(scale)) scale_ = scale
 
-        sum_w = one_sp / N
-        if(present(W)) sum_w = one_sp / stdlib_sum(W)
+        sum_w = one_csp / N
+        if(present(W)) sum_w = one_csp / stdlib_sum(W)
 
         allocate(c_P(d), source=zero_csp)
         allocate(c_Q(d), source=zero_csp)
@@ -333,7 +335,7 @@ contains
 
         ! Compute covariance matrix H = (P - c_P) * (Q - c_Q)^T and variance of P
         allocate(covariance(d,d), source=zero_csp)
-        variance_p = zero_sp
+        variance_p = zero_csp
 
         if (present(W)) then
             do point = 1, N
@@ -382,14 +384,14 @@ contains
 
         ! Scaling factor
         c = variance_p / (sum(S(1:d)))
-        if (.not. scale_) c = one_sp
+        if (.not. scale_) c = one_csp
 
         ! Translation vector
         t = c_P - c*matmul(R , c_Q )
 
         ! Compute RMSD
         allocate(vec(d), source=zero_csp)
-        rmsd = zero_sp
+        rmsd = zero_csp
         do i = 1, N
             vec(1:d) = c * matmul(R , Q(1:d,i))
             vec(1:d) = vec(1:d) + t(1:d)
@@ -428,14 +430,14 @@ contains
         ! Dimension checks
         if(size(P,dim=1)/=size(Q,dim=1) .or. size(P,dim=1)/=size(R,dim=1) .or. size(P,dim=1)/=size(R,dim=2) &
                     .or. size(P,dim=1)/=size(t)) then
-            error stop "array sizes do not match"
+            call error_stop("array sizes do not match")
         end if
         if(size(P,dim=2)/=size(Q,dim=2)) then
-            error stop "array sizes do not match"
+            call error_stop("array sizes do not match")
         end if
         if (present(W)) then
             if (size(W) /= size(P,dim=2)) then
-                error stop "array sizes do not match"
+                call error_stop("array sizes do not match")
             end if
         end if
         d = size(P,dim=1)
@@ -443,8 +445,8 @@ contains
         scale_ = .true.
         if(present(scale)) scale_ = scale
 
-        sum_w = one_dp / N
-        if(present(W)) sum_w = one_dp / stdlib_sum(W)
+        sum_w = one_cdp / N
+        if(present(W)) sum_w = one_cdp / stdlib_sum(W)
 
         allocate(c_P(d), source=zero_cdp)
         allocate(c_Q(d), source=zero_cdp)
@@ -466,7 +468,7 @@ contains
 
         ! Compute covariance matrix H = (P - c_P) * (Q - c_Q)^T and variance of P
         allocate(covariance(d,d), source=zero_cdp)
-        variance_p = zero_dp
+        variance_p = zero_cdp
 
         if (present(W)) then
             do point = 1, N
@@ -515,14 +517,14 @@ contains
 
         ! Scaling factor
         c = variance_p / (sum(S(1:d)))
-        if (.not. scale_) c = one_dp
+        if (.not. scale_) c = one_cdp
 
         ! Translation vector
         t = c_P - c*matmul(R , c_Q )
 
         ! Compute RMSD
         allocate(vec(d), source=zero_cdp)
-        rmsd = zero_dp
+        rmsd = zero_cdp
         do i = 1, N
             vec(1:d) = c * matmul(R , Q(1:d,i))
             vec(1:d) = vec(1:d) + t(1:d)
