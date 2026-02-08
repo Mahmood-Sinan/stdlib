@@ -70,7 +70,7 @@ module stdlib_spatial
             !> Root-mean-square deviation
             real(sp), intent(out) :: rmsd
             !> Optional weights
-            real(sp), intent(in), optional :: W(:)
+            complex(sp), intent(in), optional :: W(:)
             !> Enable scaling
             logical, intent(in), optional :: scale
         end subroutine
@@ -88,7 +88,7 @@ module stdlib_spatial
             !> Root-mean-square deviation
             real(dp), intent(out) :: rmsd
             !> Optional weights
-            real(dp), intent(in), optional :: W(:)
+            complex(dp), intent(in), optional :: W(:)
             !> Enable scaling
             logical, intent(in), optional :: scale
         end subroutine
