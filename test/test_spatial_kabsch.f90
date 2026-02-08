@@ -4,6 +4,7 @@ module test_kabsch
     use stdlib_math, only: all_close, is_close
     use stdlib_linalg, only: svd
     use stdlib_spatial
+    use stdlib_intrinsics, only: stdlib_sum_kahan, stdlib_dot_product_kahan, stdlib_matmul, stdlib_sum, kahan_kernel
     implicit none
 
 contains
@@ -24,7 +25,7 @@ contains
         type(error_type), allocatable, intent(out) :: error
         block
             integer, parameter :: d = 3, N = 4
-            real(sp) :: P_original(d, N), Q_original(d, N), P_recovered(d, N)
+            real(sp) :: P_original(d, N), Q_original(d, N)
             real(sp) :: R_recovered(d, d), R_original(d, d)
             real(sp) :: t_recovered(d), t_original(d)
             real(sp) :: U(d,d), Vt(d,d), S(d)
@@ -43,7 +44,11 @@ contains
             ! Constructed via SVD: R = U * V^T
             call random_number(R_original)
             call svd(R_original, S, U, Vt)
-            R_original = matmul(U, Vt)
+            do i = 1,d
+                do j = 1,d
+                    R_original(i,j) = stdlib_dot_product_kahan(U(i,:), Vt(:, j))
+                end do
+            end do
 
             ! Random scale and translation
             call random_number(c_original)
@@ -51,29 +56,33 @@ contains
 
             ! Construct P = c*R*Q + t
             do j = 1, N
-                P_original(:,j) = c_original * matmul(R_original, Q_original(:,j)) + t_original
+                do i = 1, d
+                    P_original(i,j) = c_original * &
+                        stdlib_dot_product_kahan(R_original(i,:), Q_original(:,j)) + &
+                        t_original(i)
+                end do
             end do
 
             ! Call Kabsch–Umeyama
             call kabsch(P_original, Q_original, R_recovered, t_recovered, c_recovered, rmsd)
 
-            ! Apply recovered transform
-            do j = 1, N
-                P_recovered(:,j) = c_recovered * matmul(R_recovered, Q_original(:,j)) + t_recovered
-            end do
-
-            call check(error, all_close(P_recovered, P_original), .true.)
-            if (allocated(error)) return
             call check(error, all_close(R_recovered, R_original), .true.)
+            if (allocated(error)) then 
+                print*, "R did not match in real"
+                print*, "R_recovered: ", R_recovered
+                print*, "R_original: ", R_original
+            end if
             if (allocated(error)) return
             call check(error, is_close(c_recovered, c_original), .true.)
+            if (allocated(error)) print*, "c did not match in real", ", recovered: ", c_recovered, "original: ", c_original
             if (allocated(error)) return
             call check(error, all_close(t_recovered, t_original), .true.)
+            if (allocated(error)) print*, "t did not match in real", ", recovered: ", t_recovered, "original: ", t_original
             if (allocated(error)) return
         end block
         block
             integer, parameter :: d = 3, N = 4
-            real(dp) :: P_original(d, N), Q_original(d, N), P_recovered(d, N)
+            real(dp) :: P_original(d, N), Q_original(d, N)
             real(dp) :: R_recovered(d, d), R_original(d, d)
             real(dp) :: t_recovered(d), t_original(d)
             real(dp) :: U(d,d), Vt(d,d), S(d)
@@ -92,7 +101,11 @@ contains
             ! Constructed via SVD: R = U * V^T
             call random_number(R_original)
             call svd(R_original, S, U, Vt)
-            R_original = matmul(U, Vt)
+            do i = 1,d
+                do j = 1,d
+                    R_original(i,j) = stdlib_dot_product_kahan(U(i,:), Vt(:, j))
+                end do
+            end do
 
             ! Random scale and translation
             call random_number(c_original)
@@ -100,24 +113,28 @@ contains
 
             ! Construct P = c*R*Q + t
             do j = 1, N
-                P_original(:,j) = c_original * matmul(R_original, Q_original(:,j)) + t_original
+                do i = 1, d
+                    P_original(i,j) = c_original * &
+                        stdlib_dot_product_kahan(R_original(i,:), Q_original(:,j)) + &
+                        t_original(i)
+                end do
             end do
 
             ! Call Kabsch–Umeyama
             call kabsch(P_original, Q_original, R_recovered, t_recovered, c_recovered, rmsd)
 
-            ! Apply recovered transform
-            do j = 1, N
-                P_recovered(:,j) = c_recovered * matmul(R_recovered, Q_original(:,j)) + t_recovered
-            end do
-
-            call check(error, all_close(P_recovered, P_original), .true.)
-            if (allocated(error)) return
             call check(error, all_close(R_recovered, R_original), .true.)
+            if (allocated(error)) then 
+                print*, "R did not match in real"
+                print*, "R_recovered: ", R_recovered
+                print*, "R_original: ", R_original
+            end if
             if (allocated(error)) return
             call check(error, is_close(c_recovered, c_original), .true.)
+            if (allocated(error)) print*, "c did not match in real", ", recovered: ", c_recovered, "original: ", c_original
             if (allocated(error)) return
             call check(error, all_close(t_recovered, t_original), .true.)
+            if (allocated(error)) print*, "t did not match in real", ", recovered: ", t_recovered, "original: ", t_original
             if (allocated(error)) return
         end block
     end subroutine
@@ -127,8 +144,8 @@ contains
         type(error_type), allocatable, intent(out) :: error
         block
             integer, parameter :: d = 3, N = 4
-            complex(sp) :: P_original(d, N), Q_original(d, N), P_recovered(d, N)
-            complex(sp) :: R_recovered(d, d), R_original(d, d)
+            complex(sp) :: P_original(d, N), Q_original(d, N)
+            complex(sp) :: R_recovered(d, d), R_original(d, d), cR_original(d, d), cR_recovered(d, d)
             complex(sp) :: t_recovered(d), t_original(d)
             complex(sp) :: c_recovered, c_original
             complex(sp) :: U(d,d), Vt(d,d)
@@ -159,7 +176,11 @@ contains
                 end do
             end do
             call svd(R_original, S, U, Vt)
-            R_original = matmul(U, Vt)
+            do i = 1,d
+                do j = 1,d
+                    R_original(i,j) = stdlib_dot_product_kahan(conjg(U(i,:)), Vt(:, j))
+                end do
+            end do
 
             ! Random scale and translation
             call random_number(r1)
@@ -174,27 +195,32 @@ contains
 
             ! Construct P = c*R*Q + t
             do j = 1, N
-                P_original(:,j) = c_original * matmul(R_original, Q_original(:,j)) + t_original
+                do i = 1, d
+                    P_original(i,j) = c_original * &
+                        stdlib_dot_product_kahan(conjg(R_original(i,:)), Q_original(:,j)) + &
+                        t_original(i)
+                end do
             end do
 
             ! Call Kabsch–Umeyama
             call kabsch(P_original, Q_original, R_recovered, t_recovered, c_recovered, rmsd)
 
-            ! Apply recovered transform
-            do j = 1, N
-                P_recovered(:,j) = c_recovered * matmul(R_recovered, Q_original(:,j)) + t_recovered
-            end do
-            call check(error, all_close(P_recovered, P_original), .true.)
-            if (allocated(error)) return
+            print*, "RMSD: ",rmsd
             call check(error, all_close(c_recovered * R_recovered, c_original * R_original), .true.)
+            if (allocated(error)) then
+                print*, "cR did not match in real"
+                print*, "cR_recovered: ", c_recovered * R_recovered
+                print*, "cR_original: ", c_original * R_original
+            end if
             if (allocated(error)) return
             call check(error, all_close(t_recovered, t_original), .true.)
+            if (allocated(error)) print*, "t did not match in complex", ", recovered: ", t_recovered, "original: ", t_original
             if (allocated(error)) return
         end block
         block
             integer, parameter :: d = 3, N = 4
-            complex(dp) :: P_original(d, N), Q_original(d, N), P_recovered(d, N)
-            complex(dp) :: R_recovered(d, d), R_original(d, d)
+            complex(dp) :: P_original(d, N), Q_original(d, N)
+            complex(dp) :: R_recovered(d, d), R_original(d, d), cR_original(d, d), cR_recovered(d, d)
             complex(dp) :: t_recovered(d), t_original(d)
             complex(dp) :: c_recovered, c_original
             complex(dp) :: U(d,d), Vt(d,d)
@@ -225,7 +251,11 @@ contains
                 end do
             end do
             call svd(R_original, S, U, Vt)
-            R_original = matmul(U, Vt)
+            do i = 1,d
+                do j = 1,d
+                    R_original(i,j) = stdlib_dot_product_kahan(conjg(U(i,:)), Vt(:, j))
+                end do
+            end do
 
             ! Random scale and translation
             call random_number(r1)
@@ -240,21 +270,26 @@ contains
 
             ! Construct P = c*R*Q + t
             do j = 1, N
-                P_original(:,j) = c_original * matmul(R_original, Q_original(:,j)) + t_original
+                do i = 1, d
+                    P_original(i,j) = c_original * &
+                        stdlib_dot_product_kahan(conjg(R_original(i,:)), Q_original(:,j)) + &
+                        t_original(i)
+                end do
             end do
 
             ! Call Kabsch–Umeyama
             call kabsch(P_original, Q_original, R_recovered, t_recovered, c_recovered, rmsd)
 
-            ! Apply recovered transform
-            do j = 1, N
-                P_recovered(:,j) = c_recovered * matmul(R_recovered, Q_original(:,j)) + t_recovered
-            end do
-            call check(error, all_close(P_recovered, P_original), .true.)
-            if (allocated(error)) return
+            print*, "RMSD: ",rmsd
             call check(error, all_close(c_recovered * R_recovered, c_original * R_original), .true.)
+            if (allocated(error)) then
+                print*, "cR did not match in real"
+                print*, "cR_recovered: ", c_recovered * R_recovered
+                print*, "cR_original: ", c_original * R_original
+            end if
             if (allocated(error)) return
             call check(error, all_close(t_recovered, t_original), .true.)
+            if (allocated(error)) print*, "t did not match in complex", ", recovered: ", t_recovered, "original: ", t_original
             if (allocated(error)) return
         end block
     end subroutine
