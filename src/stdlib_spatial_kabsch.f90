@@ -112,8 +112,6 @@ contains
         ! SVD of covariance matrix H -> H = U * S * Vt
         call svd(covariance, S, U, Vt)
 
-        allocate(B(d,d), source=zero_sp)
-
         ! Optimal rotation matrix.
         do i = 1,d
             do j = 1,d
@@ -252,8 +250,6 @@ contains
 
         ! SVD of covariance matrix H -> H = U * S * Vt
         call svd(covariance, S, U, Vt)
-
-        allocate(B(d,d), source=zero_dp)
 
         ! Optimal rotation matrix.
         do i = 1,d
@@ -394,8 +390,6 @@ contains
         ! SVD of covariance matrix H -> H = U * S * Vt
         call svd(covariance, S, U, Vt)
 
-        allocate(B(d,d), source=zero_csp)
-
         ! Optimal rotation matrix.
         do i = 1,d
             do j = 1,d
@@ -534,8 +528,6 @@ contains
 
         ! SVD of covariance matrix H -> H = U * S * Vt
         call svd(covariance, S, U, Vt)
-
-        allocate(B(d,d), source=zero_cdp)
 
         ! Optimal rotation matrix.
         do i = 1,d
