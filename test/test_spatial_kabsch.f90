@@ -4,7 +4,7 @@ module test_kabsch
     use stdlib_math, only: all_close, is_close
     use stdlib_linalg, only: svd
     use stdlib_spatial
-    use stdlib_intrinsics, only: stdlib_sum_kahan, stdlib_dot_product_kahan, stdlib_matmul, stdlib_sum, kahan_kernel
+    use stdlib_intrinsics, only: stdlib_dot_product_kahan
     implicit none
 
     real(sp), parameter :: sptol = 100 * epsilon(1._sp)
@@ -172,9 +172,9 @@ contains
             t_recovered = (0.0_sp, 0.0_sp)
             c_recovered = (0.0_sp, 0.0_sp)
             U = (0.0_sp, 0.0_sp)
-            S = (0.0_sp, 0.0_sp)
+            S = 0.0_sp
             Vt = (0.0_sp, 0.0_sp)
-            rmsd = (0.0_sp, 0.0_sp)
+            rmsd = 0.0_sp
 
             ! Random complex reference points Q
             do j = 1, N
@@ -255,9 +255,9 @@ contains
             t_recovered = (0.0_dp, 0.0_dp)
             c_recovered = (0.0_dp, 0.0_dp)
             U = (0.0_dp, 0.0_dp)
-            S = (0.0_dp, 0.0_dp)
+            S = 0.0_dp
             Vt = (0.0_dp, 0.0_dp)
-            rmsd = (0.0_dp, 0.0_dp)
+            rmsd = 0.0_dp
 
             ! Random complex reference points Q
             do j = 1, N
