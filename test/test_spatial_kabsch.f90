@@ -38,6 +38,14 @@ contains
             integer :: i, j
             real(sp) :: r1
 
+            R_recovered = 0.0_sp
+            t_recovered = 0.0_sp
+            c_recovered = 0.0_sp
+            U = 0.0_sp
+            S = 0.0_sp
+            Vt = 0.0_sp
+            rmsd = 0.0_sp
+
             ! Random reference points Q
             call random_number(Q_original)
 
@@ -93,6 +101,14 @@ contains
 
             integer :: i, j
             real(dp) :: r1
+
+            R_recovered = 0.0_dp
+            t_recovered = 0.0_dp
+            c_recovered = 0.0_dp
+            U = 0.0_dp
+            S = 0.0_dp
+            Vt = 0.0_dp
+            rmsd = 0.0_dp
 
             ! Random reference points Q
             call random_number(Q_original)
@@ -155,6 +171,14 @@ contains
 
             integer :: i, j
             real(sp) :: r1, r2
+
+            R_recovered = (0.0_sp, 0.0_sp)
+            t_recovered = (0.0_sp, 0.0_sp)
+            c_recovered = (0.0_sp, 0.0_sp)
+            U = (0.0_sp, 0.0_sp)
+            S = (0.0_sp, 0.0_sp)
+            Vt = (0.0_sp, 0.0_sp)
+            rmsd = (0.0_sp, 0.0_sp)
 
             ! Random complex reference points Q
             do j = 1, N
@@ -232,6 +256,14 @@ contains
 
             integer :: i, j
             real(dp) :: r1, r2
+
+            R_recovered = (0.0_dp, 0.0_dp)
+            t_recovered = (0.0_dp, 0.0_dp)
+            c_recovered = (0.0_dp, 0.0_dp)
+            U = (0.0_dp, 0.0_dp)
+            S = (0.0_dp, 0.0_dp)
+            Vt = (0.0_dp, 0.0_dp)
+            rmsd = (0.0_dp, 0.0_dp)
 
             ! Random complex reference points Q
             do j = 1, N
