@@ -1,6 +1,6 @@
 submodule(stdlib_spatial) stdlib_spatial_kabsch
-    use stdlib_linalg, only: svd, det, eye
-    use stdlib_intrinsics, only: stdlib_sum_kahan, stdlib_dot_product_kahan, stdlib_matmul, stdlib_sum, kahan_kernel
+    use stdlib_linalg, only: svd
+    use stdlib_intrinsics, only: stdlib_sum_kahan, stdlib_dot_product_kahan, kahan_kernel
 
 contains
     module subroutine kabsch_sp(P, Q, R, t, c, rmsd, W, scale)
