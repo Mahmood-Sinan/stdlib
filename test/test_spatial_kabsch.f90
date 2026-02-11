@@ -84,10 +84,8 @@ contains
             end do
 
             call check(error, all_close(P_recovered, P_original, abs_tol = sptol), .true.)
-            if (allocated(error)) print*, "P did not match in real", ", recovered: ", P_recovered, "original: ", P_original
             if (allocated(error)) return
             call check(error, is_close(rmsd, 0.0_sp, abs_tol = sptol), .true.)
-            if(allocated(error)) print*, "RMSD: ",rmsd
             if(allocated(error)) return
         end block
         block
@@ -148,10 +146,8 @@ contains
             end do
 
             call check(error, all_close(P_recovered, P_original, abs_tol = dptol), .true.)
-            if (allocated(error)) print*, "P did not match in real", ", recovered: ", P_recovered, "original: ", P_original
             if (allocated(error)) return
             call check(error, is_close(rmsd, 0.0_dp, abs_tol = dptol), .true.)
-            if(allocated(error)) print*, "RMSD: ",rmsd
             if(allocated(error)) return
         end block
     end subroutine
@@ -238,10 +234,8 @@ contains
             end do
 
             call check(error, all_close(P_recovered, P_original, abs_tol = sptol), .true.)
-            if (allocated(error)) print*, "P did not match in complex", ", recovered: ", P_recovered, "original: ", P_original
             if (allocated(error)) return
             call check(error, is_close(rmsd, 0.0_sp, abs_tol = sptol), .true.)
-            if(allocated(error)) print*, "RMSD: ",rmsd
             if(allocated(error)) return
         end block
         block
@@ -323,10 +317,8 @@ contains
             end do
 
             call check(error, all_close(P_recovered, P_original, abs_tol = dptol), .true.)
-            if (allocated(error)) print*, "P did not match in complex", ", recovered: ", P_recovered, "original: ", P_original
             if (allocated(error)) return
             call check(error, is_close(rmsd, 0.0_dp, abs_tol = dptol), .true.)
-            if(allocated(error)) print*, "RMSD: ",rmsd
             if(allocated(error)) return
         end block
     end subroutine
