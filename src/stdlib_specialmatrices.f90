@@ -11,8 +11,8 @@ module stdlib_specialmatrices
     implicit none
     private
     public :: tridiagonal
-    public :: spmv, solve
-    public :: dense, transpose, hermitian, determinant, inverse
+    public :: spmv
+    public :: dense, transpose, hermitian
     public :: operator(*), operator(+), operator(-)
 
     !--------------------------------------
@@ -337,31 +337,6 @@ module stdlib_specialmatrices
             character(1), intent(in), optional :: op
         end subroutine
     end interface
-    
-    ! solve equations of the type A * x = b where A is tridiagonal
-    interface solve
-    module subroutine solve_tridiag_sp(A, b, x)
-        type(tridiagonal_sp_type), intent(in) :: A
-        real(sp), intent(in), contiguous :: b(:,:)
-        real(sp), intent(inout), contiguous, target :: x(:,:)
-    end subroutine
-    module subroutine solve_tridiag_dp(A, b, x)
-        type(tridiagonal_dp_type), intent(in) :: A
-        real(dp), intent(in), contiguous :: b(:,:)
-        real(dp), intent(inout), contiguous, target :: x(:,:)
-    end subroutine
-    module subroutine solve_tridiag_csp(A, b, x)
-        type(tridiagonal_csp_type), intent(in) :: A
-        complex(sp), intent(in), contiguous :: b(:,:)
-        complex(sp), intent(inout), contiguous, target :: x(:,:)
-    end subroutine
-    module subroutine solve_tridiag_cdp(A, b, x)
-        type(tridiagonal_cdp_type), intent(in) :: A
-        complex(dp), intent(in), contiguous :: b(:,:)
-        complex(dp), intent(inout), contiguous, target :: x(:,:)
-    end subroutine
-    end interface
-
 
     !-------------------------------------
     !-----                           -----
@@ -456,43 +431,6 @@ module stdlib_specialmatrices
         end function
     end interface
 
-    interface determinant
-    module function determinant_tridiagonal_sp(A) result(B)
-        type(tridiagonal_sp_type), intent(in) :: A
-        real(sp) :: B
-    end function
-    module function determinant_tridiagonal_dp(A) result(B)
-        type(tridiagonal_dp_type), intent(in) :: A
-        real(dp) :: B
-    end function
-    module function determinant_tridiagonal_csp(A) result(B)
-        type(tridiagonal_csp_type), intent(in) :: A
-        complex(sp) :: B
-    end function
-    module function determinant_tridiagonal_cdp(A) result(B)
-        type(tridiagonal_cdp_type), intent(in) :: A
-        complex(dp) :: B
-    end function
-    end interface
-
-    interface inverse
-    module function inverse_tridiagonal_sp(A) result(B)
-        type(tridiagonal_sp_type), intent(in) :: A
-        real(sp), allocatable :: B(:, :)
-    end function
-    module function inverse_tridiagonal_dp(A) result(B)
-        type(tridiagonal_dp_type), intent(in) :: A
-        real(dp), allocatable :: B(:, :)
-    end function
-    module function inverse_tridiagonal_csp(A) result(B)
-        type(tridiagonal_csp_type), intent(in) :: A
-        complex(sp), allocatable :: B(:, :)
-    end function
-    module function inverse_tridiagonal_cdp(A) result(B)
-        type(tridiagonal_cdp_type), intent(in) :: A
-        complex(dp), allocatable :: B(:, :)
-    end function
-    end interface
     !----------------------------------------
     !-----                              -----
     !-----     ARITHMETIC OPERATORS     -----
