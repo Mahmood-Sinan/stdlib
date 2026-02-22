@@ -273,14 +273,22 @@ module stdlib_str2num
         integer(int8), intent(out)  :: p !! position within the number
         integer(int8), intent(out)  :: stat !! status upon succes or failure to read
         ! -- Internal Variables
-        integer(int8)  :: val 
+        integer(int8)  :: val
+        integer(int8) :: sign
         !----------------------------------------------
         stat = 23 !! initialize error status with any number > 0
         !----------------------------------------------
         ! Find first non white space
         p = shift_to_nonwhitespace(s)
         !----------------------------------------------
+        ! Verify leading negative
+        sign = 1
+        if( iachar(s(p:p)) == minus_sign+digit_0 ) then
+            sign = -1
+            p = p + 1
+        end if
         v = 0
+        !----------------------------------------------
         do while( p<=len(s) )
             val = iachar(s(p:p))-digit_0
             if( val >= 0 .and. val <= 9 ) then
@@ -290,9 +298,9 @@ module stdlib_str2num
                 exit
             end if
         end do
+        v = sign * v
         stat = 0
     end subroutine
-
     elemental subroutine to_int16_base(s,v,p,stat)
         !! Return an int16 integer
         ! -- In/out Variables
@@ -301,14 +309,22 @@ module stdlib_str2num
         integer(int8), intent(out)  :: p !! position within the number
         integer(int8), intent(out)  :: stat !! status upon succes or failure to read
         ! -- Internal Variables
-        integer(int8)  :: val 
+        integer(int8)  :: val
+        integer(int8) :: sign
         !----------------------------------------------
         stat = 23 !! initialize error status with any number > 0
         !----------------------------------------------
         ! Find first non white space
         p = shift_to_nonwhitespace(s)
         !----------------------------------------------
+        ! Verify leading negative
+        sign = 1
+        if( iachar(s(p:p)) == minus_sign+digit_0 ) then
+            sign = -1
+            p = p + 1
+        end if
         v = 0
+        !----------------------------------------------
         do while( p<=len(s) )
             val = iachar(s(p:p))-digit_0
             if( val >= 0 .and. val <= 9 ) then
@@ -318,9 +334,9 @@ module stdlib_str2num
                 exit
             end if
         end do
+        v = sign * v
         stat = 0
     end subroutine
-
     elemental subroutine to_int32_base(s,v,p,stat)
         !! Return an int32 integer
         ! -- In/out Variables
@@ -329,14 +345,22 @@ module stdlib_str2num
         integer(int8), intent(out)  :: p !! position within the number
         integer(int8), intent(out)  :: stat !! status upon succes or failure to read
         ! -- Internal Variables
-        integer(int8)  :: val 
+        integer(int8)  :: val
+        integer(int8) :: sign
         !----------------------------------------------
         stat = 23 !! initialize error status with any number > 0
         !----------------------------------------------
         ! Find first non white space
         p = shift_to_nonwhitespace(s)
         !----------------------------------------------
+        ! Verify leading negative
+        sign = 1
+        if( iachar(s(p:p)) == minus_sign+digit_0 ) then
+            sign = -1
+            p = p + 1
+        end if
         v = 0
+        !----------------------------------------------
         do while( p<=len(s) )
             val = iachar(s(p:p))-digit_0
             if( val >= 0 .and. val <= 9 ) then
@@ -346,9 +370,9 @@ module stdlib_str2num
                 exit
             end if
         end do
+        v = sign * v
         stat = 0
     end subroutine
-
     elemental subroutine to_int64_base(s,v,p,stat)
         !! Return an int64 integer
         ! -- In/out Variables
@@ -357,14 +381,22 @@ module stdlib_str2num
         integer(int8), intent(out)  :: p !! position within the number
         integer(int8), intent(out)  :: stat !! status upon succes or failure to read
         ! -- Internal Variables
-        integer(int8)  :: val 
+        integer(int8)  :: val
+        integer(int8) :: sign
         !----------------------------------------------
         stat = 23 !! initialize error status with any number > 0
         !----------------------------------------------
         ! Find first non white space
         p = shift_to_nonwhitespace(s)
         !----------------------------------------------
+        ! Verify leading negative
+        sign = 1
+        if( iachar(s(p:p)) == minus_sign+digit_0 ) then
+            sign = -1
+            p = p + 1
+        end if
         v = 0
+        !----------------------------------------------
         do while( p<=len(s) )
             val = iachar(s(p:p))-digit_0
             if( val >= 0 .and. val <= 9 ) then
@@ -374,9 +406,9 @@ module stdlib_str2num
                 exit
             end if
         end do
+        v = sign * v
         stat = 0
     end subroutine
-
 
     elemental subroutine to_sp_base(s,v,p,stat)
         integer, parameter :: wp    = sp
