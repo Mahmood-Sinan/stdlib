@@ -291,16 +291,27 @@ module stdlib_str2num
         end if
         v = 0
         !----------------------------------------------
-        do while( p<=len(s) )
-            val = iachar(s(p:p))-digit_0
-            if( val >= 0 .and. val <= 9 ) then
-                v = v*10 + val
-                p = p + 1
-            else
-                exit
-            end if
-        end do
-        v = sign * v
+        if(sign == 1_int8) then
+            do while( p<=len(s) )
+                val = iachar(s(p:p))-digit_0
+                if( val >= 0 .and. val <= 9 ) then
+                    v = v*10 + val
+                    p = p + 1
+                else
+                    exit
+                end if
+            end do
+        else
+            do while( p<=len(s) )
+                val = iachar(s(p:p))-digit_0
+                if( val >= 0 .and. val <= 9 ) then
+                    v = v*10 -val
+                    p = p + 1
+                else
+                    exit
+                end if
+            end do
+        end if
         stat = 0
     end subroutine
     elemental subroutine to_int16_base(s,v,p,stat)
@@ -329,16 +340,27 @@ module stdlib_str2num
         end if
         v = 0
         !----------------------------------------------
-        do while( p<=len(s) )
-            val = iachar(s(p:p))-digit_0
-            if( val >= 0 .and. val <= 9 ) then
-                v = v*10 + val
-                p = p + 1
-            else
-                exit
-            end if
-        end do
-        v = sign * v
+        if(sign == 1_int8) then
+            do while( p<=len(s) )
+                val = iachar(s(p:p))-digit_0
+                if( val >= 0 .and. val <= 9 ) then
+                    v = v*10 + val
+                    p = p + 1
+                else
+                    exit
+                end if
+            end do
+        else
+            do while( p<=len(s) )
+                val = iachar(s(p:p))-digit_0
+                if( val >= 0 .and. val <= 9 ) then
+                    v = v*10 -val
+                    p = p + 1
+                else
+                    exit
+                end if
+            end do
+        end if
         stat = 0
     end subroutine
     elemental subroutine to_int32_base(s,v,p,stat)
@@ -367,16 +389,27 @@ module stdlib_str2num
         end if
         v = 0
         !----------------------------------------------
-        do while( p<=len(s) )
-            val = iachar(s(p:p))-digit_0
-            if( val >= 0 .and. val <= 9 ) then
-                v = v*10 + val
-                p = p + 1
-            else
-                exit
-            end if
-        end do
-        v = sign * v
+        if(sign == 1_int8) then
+            do while( p<=len(s) )
+                val = iachar(s(p:p))-digit_0
+                if( val >= 0 .and. val <= 9 ) then
+                    v = v*10 + val
+                    p = p + 1
+                else
+                    exit
+                end if
+            end do
+        else
+            do while( p<=len(s) )
+                val = iachar(s(p:p))-digit_0
+                if( val >= 0 .and. val <= 9 ) then
+                    v = v*10 -val
+                    p = p + 1
+                else
+                    exit
+                end if
+            end do
+        end if
         stat = 0
     end subroutine
     elemental subroutine to_int64_base(s,v,p,stat)
@@ -405,16 +438,27 @@ module stdlib_str2num
         end if
         v = 0
         !----------------------------------------------
-        do while( p<=len(s) )
-            val = iachar(s(p:p))-digit_0
-            if( val >= 0 .and. val <= 9 ) then
-                v = v*10 + val
-                p = p + 1
-            else
-                exit
-            end if
-        end do
-        v = sign * v
+        if(sign == 1_int8) then
+            do while( p<=len(s) )
+                val = iachar(s(p:p))-digit_0
+                if( val >= 0 .and. val <= 9 ) then
+                    v = v*10 + val
+                    p = p + 1
+                else
+                    exit
+                end if
+            end do
+        else
+            do while( p<=len(s) )
+                val = iachar(s(p:p))-digit_0
+                if( val >= 0 .and. val <= 9 ) then
+                    v = v*10 -val
+                    p = p + 1
+                else
+                    exit
+                end if
+            end do
+        end if
         stat = 0
     end subroutine
 
