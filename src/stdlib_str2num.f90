@@ -283,9 +283,11 @@ module stdlib_str2num
         !----------------------------------------------
         ! Verify leading negative
         sign = 1
-        if( iachar(s(p:p)) == minus_sign+digit_0 ) then
-            sign = -1
-            p = p + 1
+        if(p<=len(s)) then
+            if(iachar(s(p:p)) == minus_sign+digit_0 ) then
+                sign = -1
+                p = p + 1
+            end if
         end if
         v = 0
         !----------------------------------------------
@@ -319,9 +321,11 @@ module stdlib_str2num
         !----------------------------------------------
         ! Verify leading negative
         sign = 1
-        if( iachar(s(p:p)) == minus_sign+digit_0 ) then
-            sign = -1
-            p = p + 1
+        if(p<=len(s)) then
+            if(iachar(s(p:p)) == minus_sign+digit_0 ) then
+                sign = -1
+                p = p + 1
+            end if
         end if
         v = 0
         !----------------------------------------------
@@ -355,9 +359,11 @@ module stdlib_str2num
         !----------------------------------------------
         ! Verify leading negative
         sign = 1
-        if( iachar(s(p:p)) == minus_sign+digit_0 ) then
-            sign = -1
-            p = p + 1
+        if(p<=len(s)) then
+            if(iachar(s(p:p)) == minus_sign+digit_0 ) then
+                sign = -1
+                p = p + 1
+            end if
         end if
         v = 0
         !----------------------------------------------
@@ -391,9 +397,11 @@ module stdlib_str2num
         !----------------------------------------------
         ! Verify leading negative
         sign = 1
-        if( iachar(s(p:p)) == minus_sign+digit_0 ) then
-            sign = -1
-            p = p + 1
+        if(p<=len(s)) then
+            if(iachar(s(p:p)) == minus_sign+digit_0 ) then
+                sign = -1
+                p = p + 1
+            end if
         end if
         v = 0
         !----------------------------------------------
