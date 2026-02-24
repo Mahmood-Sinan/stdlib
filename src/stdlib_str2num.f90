@@ -93,7 +93,7 @@ module stdlib_str2num
     ! String To Number interfaces
     !---------------------------------------------
 
-    elemental function to_int8(s,mold) result(v)
+    function to_int8(s,mold) result(v)
         ! -- In/out Variables
         character(*), intent(in) :: s !! input string
         integer(int8), intent(in) :: mold !! dummy argument to disambiguate at compile time the generic interface
@@ -121,7 +121,7 @@ module stdlib_str2num
         if(present(stat)) stat = err
     end function
 
-    elemental function to_int16(s,mold) result(v)
+    function to_int16(s,mold) result(v)
         ! -- In/out Variables
         character(*), intent(in) :: s !! input string
         integer(int16), intent(in) :: mold !! dummy argument to disambiguate at compile time the generic interface
@@ -149,7 +149,7 @@ module stdlib_str2num
         if(present(stat)) stat = err
     end function
 
-    elemental function to_int32(s,mold) result(v)
+    function to_int32(s,mold) result(v)
         ! -- In/out Variables
         character(*), intent(in) :: s !! input string
         integer(int32), intent(in) :: mold !! dummy argument to disambiguate at compile time the generic interface
@@ -177,7 +177,7 @@ module stdlib_str2num
         if(present(stat)) stat = err
     end function
 
-    elemental function to_int64(s,mold) result(v)
+    function to_int64(s,mold) result(v)
         ! -- In/out Variables
         character(*), intent(in) :: s !! input string
         integer(int64), intent(in) :: mold !! dummy argument to disambiguate at compile time the generic interface
@@ -205,7 +205,7 @@ module stdlib_str2num
         if(present(stat)) stat = err
     end function
 
-    elemental function to_sp(s,mold) result(v)
+    function to_sp(s,mold) result(v)
         ! -- In/out Variables
         character(*), intent(in) :: s !! input string
         real(sp), intent(in) :: mold !! dummy argument to disambiguate at compile time the generic interface
@@ -233,7 +233,7 @@ module stdlib_str2num
         if(present(stat)) stat = err
     end function
 
-    elemental function to_dp(s,mold) result(v)
+    function to_dp(s,mold) result(v)
         ! -- In/out Variables
         character(*), intent(in) :: s !! input string
         real(dp), intent(in) :: mold !! dummy argument to disambiguate at compile time the generic interface
@@ -265,7 +265,7 @@ module stdlib_str2num
     ! String To Number Implementations
     !---------------------------------------------
 
-    elemental subroutine to_int8_base(s,v,p,stat)
+    subroutine to_int8_base(s,v,p,stat)
         !! Return an int8 integer
         ! -- In/out Variables
         character(*), intent(in) :: s !! input string
@@ -291,30 +291,23 @@ module stdlib_str2num
         end if
         v = 0
         !----------------------------------------------
-        if(sign == 1_int8) then
-            do while( p<=len(s) )
-                val = iachar(s(p:p))-digit_0
-                if( val >= 0 .and. val <= 9 ) then
-                    v = v*10 + val
-                    p = p + 1
-                else
-                    exit
-                end if
-            end do
+        do while( p<=len(s) )
+            val = iachar(s(p:p))-digit_0
+            if( val >= 0 .and. val <= 9 ) then
+                v = v*10 + val
+                p = p + 1
+            else
+                exit
+            end if
+        end do
+        if(v >= 0) then
+            v = sign * v
+            stat = 0
         else
-            do while( p<=len(s) )
-                val = iachar(s(p:p))-digit_0
-                if( val >= 0 .and. val <= 9 ) then
-                    v = v*10 -val
-                    p = p + 1
-                else
-                    exit
-                end if
-            end do
+            stat = -1 !! Indicates integer overflow
         end if
-        stat = 0
     end subroutine
-    elemental subroutine to_int16_base(s,v,p,stat)
+    subroutine to_int16_base(s,v,p,stat)
         !! Return an int16 integer
         ! -- In/out Variables
         character(*), intent(in) :: s !! input string
@@ -340,30 +333,23 @@ module stdlib_str2num
         end if
         v = 0
         !----------------------------------------------
-        if(sign == 1_int8) then
-            do while( p<=len(s) )
-                val = iachar(s(p:p))-digit_0
-                if( val >= 0 .and. val <= 9 ) then
-                    v = v*10 + val
-                    p = p + 1
-                else
-                    exit
-                end if
-            end do
+        do while( p<=len(s) )
+            val = iachar(s(p:p))-digit_0
+            if( val >= 0 .and. val <= 9 ) then
+                v = v*10 + val
+                p = p + 1
+            else
+                exit
+            end if
+        end do
+        if(v >= 0) then
+            v = sign * v
+            stat = 0
         else
-            do while( p<=len(s) )
-                val = iachar(s(p:p))-digit_0
-                if( val >= 0 .and. val <= 9 ) then
-                    v = v*10 -val
-                    p = p + 1
-                else
-                    exit
-                end if
-            end do
+            stat = -1 !! Indicates integer overflow
         end if
-        stat = 0
     end subroutine
-    elemental subroutine to_int32_base(s,v,p,stat)
+    subroutine to_int32_base(s,v,p,stat)
         !! Return an int32 integer
         ! -- In/out Variables
         character(*), intent(in) :: s !! input string
@@ -389,30 +375,23 @@ module stdlib_str2num
         end if
         v = 0
         !----------------------------------------------
-        if(sign == 1_int8) then
-            do while( p<=len(s) )
-                val = iachar(s(p:p))-digit_0
-                if( val >= 0 .and. val <= 9 ) then
-                    v = v*10 + val
-                    p = p + 1
-                else
-                    exit
-                end if
-            end do
+        do while( p<=len(s) )
+            val = iachar(s(p:p))-digit_0
+            if( val >= 0 .and. val <= 9 ) then
+                v = v*10 + val
+                p = p + 1
+            else
+                exit
+            end if
+        end do
+        if(v >= 0) then
+            v = sign * v
+            stat = 0
         else
-            do while( p<=len(s) )
-                val = iachar(s(p:p))-digit_0
-                if( val >= 0 .and. val <= 9 ) then
-                    v = v*10 -val
-                    p = p + 1
-                else
-                    exit
-                end if
-            end do
+            stat = -1 !! Indicates integer overflow
         end if
-        stat = 0
     end subroutine
-    elemental subroutine to_int64_base(s,v,p,stat)
+    subroutine to_int64_base(s,v,p,stat)
         !! Return an int64 integer
         ! -- In/out Variables
         character(*), intent(in) :: s !! input string
@@ -438,28 +417,21 @@ module stdlib_str2num
         end if
         v = 0
         !----------------------------------------------
-        if(sign == 1_int8) then
-            do while( p<=len(s) )
-                val = iachar(s(p:p))-digit_0
-                if( val >= 0 .and. val <= 9 ) then
-                    v = v*10 + val
-                    p = p + 1
-                else
-                    exit
-                end if
-            end do
+        do while( p<=len(s) )
+            val = iachar(s(p:p))-digit_0
+            if( val >= 0 .and. val <= 9 ) then
+                v = v*10 + val
+                p = p + 1
+            else
+                exit
+            end if
+        end do
+        if(v >= 0) then
+            v = sign * v
+            stat = 0
         else
-            do while( p<=len(s) )
-                val = iachar(s(p:p))-digit_0
-                if( val >= 0 .and. val <= 9 ) then
-                    v = v*10 -val
-                    p = p + 1
-                else
-                    exit
-                end if
-            end do
+            stat = -1 !! Indicates integer overflow
         end if
-        stat = 0
     end subroutine
 
     elemental subroutine to_sp_base(s,v,p,stat)
