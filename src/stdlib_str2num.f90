@@ -288,6 +288,8 @@ module stdlib_str2num
                 sign = -1
                 p = p + 1
             end if
+        else
+             return
         end if
         v = 0
         !----------------------------------------------
@@ -330,6 +332,8 @@ module stdlib_str2num
                 sign = -1
                 p = p + 1
             end if
+        else
+             return
         end if
         v = 0
         !----------------------------------------------
@@ -372,6 +376,8 @@ module stdlib_str2num
                 sign = -1
                 p = p + 1
             end if
+        else
+             return
         end if
         v = 0
         !----------------------------------------------
@@ -414,6 +420,8 @@ module stdlib_str2num
                 sign = -1
                 p = p + 1
             end if
+        else
+             return
         end if
         v = 0
         !----------------------------------------------
