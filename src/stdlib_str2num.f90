@@ -289,10 +289,10 @@ module stdlib_str2num
                 p = p + 1
             end if
         else
-             return
+            return
         end if
-        v = 0
         !----------------------------------------------
+        v = 0
         do while( p<=len(s) )
             val = iachar(s(p:p))-digit_0
             if( val >= 0 .and. val <= 9 ) then
@@ -333,10 +333,10 @@ module stdlib_str2num
                 p = p + 1
             end if
         else
-             return
+            return
         end if
-        v = 0
         !----------------------------------------------
+        v = 0
         do while( p<=len(s) )
             val = iachar(s(p:p))-digit_0
             if( val >= 0 .and. val <= 9 ) then
@@ -377,10 +377,10 @@ module stdlib_str2num
                 p = p + 1
             end if
         else
-             return
+            return
         end if
-        v = 0
         !----------------------------------------------
+        v = 0
         do while( p<=len(s) )
             val = iachar(s(p:p))-digit_0
             if( val >= 0 .and. val <= 9 ) then
@@ -421,10 +421,10 @@ module stdlib_str2num
                 p = p + 1
             end if
         else
-             return
+            return
         end if
-        v = 0
         !----------------------------------------------
+        v = 0
         do while( p<=len(s) )
             val = iachar(s(p:p))-digit_0
             if( val >= 0 .and. val <= 9 ) then
