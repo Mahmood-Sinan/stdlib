@@ -93,7 +93,7 @@ module stdlib_str2num
     ! String To Number interfaces
     !---------------------------------------------
 
-    function to_int8(s,mold) result(v)
+    elemental function to_int8(s,mold) result(v)
         ! -- In/out Variables
         character(*), intent(in) :: s !! input string
         integer(int8), intent(in) :: mold !! dummy argument to disambiguate at compile time the generic interface
@@ -121,7 +121,7 @@ module stdlib_str2num
         if(present(stat)) stat = err
     end function
 
-    function to_int16(s,mold) result(v)
+    elemental function to_int16(s,mold) result(v)
         ! -- In/out Variables
         character(*), intent(in) :: s !! input string
         integer(int16), intent(in) :: mold !! dummy argument to disambiguate at compile time the generic interface
@@ -149,7 +149,7 @@ module stdlib_str2num
         if(present(stat)) stat = err
     end function
 
-    function to_int32(s,mold) result(v)
+    elemental function to_int32(s,mold) result(v)
         ! -- In/out Variables
         character(*), intent(in) :: s !! input string
         integer(int32), intent(in) :: mold !! dummy argument to disambiguate at compile time the generic interface
@@ -177,7 +177,7 @@ module stdlib_str2num
         if(present(stat)) stat = err
     end function
 
-    function to_int64(s,mold) result(v)
+    elemental function to_int64(s,mold) result(v)
         ! -- In/out Variables
         character(*), intent(in) :: s !! input string
         integer(int64), intent(in) :: mold !! dummy argument to disambiguate at compile time the generic interface
@@ -205,7 +205,7 @@ module stdlib_str2num
         if(present(stat)) stat = err
     end function
 
-    function to_sp(s,mold) result(v)
+    elemental function to_sp(s,mold) result(v)
         ! -- In/out Variables
         character(*), intent(in) :: s !! input string
         real(sp), intent(in) :: mold !! dummy argument to disambiguate at compile time the generic interface
@@ -233,7 +233,7 @@ module stdlib_str2num
         if(present(stat)) stat = err
     end function
 
-    function to_dp(s,mold) result(v)
+    elemental function to_dp(s,mold) result(v)
         ! -- In/out Variables
         character(*), intent(in) :: s !! input string
         real(dp), intent(in) :: mold !! dummy argument to disambiguate at compile time the generic interface
@@ -265,7 +265,7 @@ module stdlib_str2num
     ! String To Number Implementations
     !---------------------------------------------
 
-    subroutine to_int8_base(s,v,p,stat)
+    elemental subroutine to_int8_base(s,v,p,stat)
         !! Return an int8 integer
         ! -- In/out Variables
         character(*), intent(in) :: s !! input string
@@ -307,7 +307,7 @@ module stdlib_str2num
             stat = -1 !! Indicates integer overflow
         end if
     end subroutine
-    subroutine to_int16_base(s,v,p,stat)
+    elemental subroutine to_int16_base(s,v,p,stat)
         !! Return an int16 integer
         ! -- In/out Variables
         character(*), intent(in) :: s !! input string
@@ -349,7 +349,7 @@ module stdlib_str2num
             stat = -1 !! Indicates integer overflow
         end if
     end subroutine
-    subroutine to_int32_base(s,v,p,stat)
+    elemental subroutine to_int32_base(s,v,p,stat)
         !! Return an int32 integer
         ! -- In/out Variables
         character(*), intent(in) :: s !! input string
@@ -391,7 +391,7 @@ module stdlib_str2num
             stat = -1 !! Indicates integer overflow
         end if
     end subroutine
-    subroutine to_int64_base(s,v,p,stat)
+    elemental subroutine to_int64_base(s,v,p,stat)
         !! Return an int64 integer
         ! -- In/out Variables
         character(*), intent(in) :: s !! input string
