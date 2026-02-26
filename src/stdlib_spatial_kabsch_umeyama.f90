@@ -23,8 +23,7 @@ contains
 
         ! Internal variables.
         integer(ilp) :: i, j, point, d, N
-        real(sp), allocatable :: covariance(:,:), U(:,:), Vt(:,:), B(:,:), vec(:), tmp_N(:), tmp_d(:), c_P(:), c_Q(:)
-        real(sp) ::  vp, vq
+        real(sp), allocatable :: covariance(:,:), U(:,:), Vt(:,:), vec(:), tmp_N(:), tmp_d(:), c_P(:), c_Q(:)
         real(sp) :: sum_w, variance_p
         real(sp), allocatable :: S(:)
         logical :: scale_
@@ -168,8 +167,7 @@ contains
 
         ! Internal variables.
         integer(ilp) :: i, j, point, d, N
-        real(dp), allocatable :: covariance(:,:), U(:,:), Vt(:,:), B(:,:), vec(:), tmp_N(:), tmp_d(:), c_P(:), c_Q(:)
-        real(dp) ::  vp, vq
+        real(dp), allocatable :: covariance(:,:), U(:,:), Vt(:,:), vec(:), tmp_N(:), tmp_d(:), c_P(:), c_Q(:)
         real(dp) :: sum_w, variance_p
         real(dp), allocatable :: S(:)
         logical :: scale_
@@ -313,8 +311,7 @@ contains
 
         ! Internal variables.
         integer(ilp) :: i, j, point, d, N
-        complex(sp), allocatable :: covariance(:,:), U(:,:), Vt(:,:), B(:,:), vec(:), tmp_N(:), tmp_d(:), c_P(:), c_Q(:)
-        complex(sp) ::  vp, vq
+        complex(sp), allocatable :: covariance(:,:), U(:,:), Vt(:,:), vec(:), tmp_N(:), tmp_d(:), c_P(:), c_Q(:)
         real(sp) :: sum_w, variance_p
         real(sp), allocatable :: S(:)
         logical :: scale_
@@ -339,8 +336,8 @@ contains
         scale_ = .true.
         if(present(scale)) scale_ = scale
 
-        sum_w = one_csp / N
-        if(present(W)) sum_w = one_csp / stdlib_sum_kahan(W)
+        sum_w = one_sp / N
+        if(present(W)) sum_w = one_sp / stdlib_sum_kahan(W)
 
         allocate(c_P(d), source=zero_csp)
         allocate(c_Q(d), source=zero_csp)
@@ -366,7 +363,7 @@ contains
         ! Compute covariance matrix H = (P - c_P) * (Q - c_Q)^T and variance of P
         allocate(covariance(d,d), source=zero_csp)
         allocate(tmp_d(d), source=zero_csp)
-        variance_p = zero_csp
+        variance_p = zero_sp
 
         if (present(W)) then
             do point = 1, N
@@ -426,8 +423,8 @@ contains
 
         ! Compute RMSD
         allocate(vec(d), source=zero_csp)
-        rmsd = zero_csp
-        rmsd_err = zero_csp
+        rmsd = zero_sp
+        rmsd_err = zero_sp
         do point = 1, N
             ! Calculate the k^th difference vector by the formula vec_k = c*R*Q_k + t - P_k
             do i = 1, d
@@ -458,8 +455,7 @@ contains
 
         ! Internal variables.
         integer(ilp) :: i, j, point, d, N
-        complex(dp), allocatable :: covariance(:,:), U(:,:), Vt(:,:), B(:,:), vec(:), tmp_N(:), tmp_d(:), c_P(:), c_Q(:)
-        complex(dp) ::  vp, vq
+        complex(dp), allocatable :: covariance(:,:), U(:,:), Vt(:,:), vec(:), tmp_N(:), tmp_d(:), c_P(:), c_Q(:)
         real(dp) :: sum_w, variance_p
         real(dp), allocatable :: S(:)
         logical :: scale_
@@ -484,8 +480,8 @@ contains
         scale_ = .true.
         if(present(scale)) scale_ = scale
 
-        sum_w = one_cdp / N
-        if(present(W)) sum_w = one_cdp / stdlib_sum_kahan(W)
+        sum_w = one_dp / N
+        if(present(W)) sum_w = one_dp / stdlib_sum_kahan(W)
 
         allocate(c_P(d), source=zero_cdp)
         allocate(c_Q(d), source=zero_cdp)
@@ -511,7 +507,7 @@ contains
         ! Compute covariance matrix H = (P - c_P) * (Q - c_Q)^T and variance of P
         allocate(covariance(d,d), source=zero_cdp)
         allocate(tmp_d(d), source=zero_cdp)
-        variance_p = zero_cdp
+        variance_p = zero_dp
 
         if (present(W)) then
             do point = 1, N
@@ -571,8 +567,8 @@ contains
 
         ! Compute RMSD
         allocate(vec(d), source=zero_cdp)
-        rmsd = zero_cdp
-        rmsd_err = zero_cdp
+        rmsd = zero_dp
+        rmsd_err = zero_dp
         do point = 1, N
             ! Calculate the k^th difference vector by the formula vec_k = c*R*Q_k + t - P_k
             do i = 1, d
