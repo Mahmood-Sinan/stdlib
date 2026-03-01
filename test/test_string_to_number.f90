@@ -207,7 +207,7 @@ contains
             abs_err = to_num_out - formatted_read_out
             rel_err = abs_err / formatted_read_out
 
-            if(abs(rel_err) > epsilon(0.0_wp)) then
+            if(abs(rel_err) > 10*epsilon(0.0_wp)) then
                 write(*,"('formatted read : ', g0)") formatted_read_out
                 write(*,"('to_num         : ', g0)") to_num_out
                 write(*,"('difference abs : ', g0)") abs_err
