@@ -95,6 +95,9 @@ contains
         &                        "175706828388979108268586060148663818836212158203125E-44"))
         if (allocated(error)) return
 
+        call check(error, ucheck("5.405355598523852356954817904851589E-0002"))
+        if (allocated(error)) return
+
     contains
         logical function ucheck(s)
             character(*), intent(in) :: s
@@ -191,6 +194,9 @@ contains
 
         call check(error, ucheck("0.140129846432481707092372958328991613128026194187651577"//&
         &                        "175706828388979108268586060148663818836212158203125E-44"))
+        if (allocated(error)) return
+
+        call check(error, ucheck("5.405355598523852356954817904851589E-0002"))
         if (allocated(error)) return
 
     contains
