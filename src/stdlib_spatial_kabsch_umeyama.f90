@@ -1,12 +1,12 @@
 submodule(stdlib_spatial) stdlib_spatial_kabsch_umeyama
-    use stdlib_linalg, only: svd
+    use stdlib_linalg, only: svd, det
     use stdlib_intrinsics, only: stdlib_sum_kahan, stdlib_dot_product_kahan, kahan_kernel
 
 contains
     module subroutine kabsch_umeyama_sp(P, Q, R, t, c, rmsd, W, scale)
-        !> Reference point set (d × N)
-        real(sp), intent(in) :: P(:, :)
         !> Target point set (d × N)
+        real(sp), intent(in) :: P(:, :)
+        !> Reference point set (d × N)
         real(sp), intent(in) :: Q(:, :)
         !> Optimal rotation matrix (d × d)
         real(sp), intent(out) :: R(:,:)
@@ -27,6 +27,7 @@ contains
         real(sp) :: sum_w, variance_p
         real(sp), allocatable :: S(:)
         logical :: scale_
+        logical :: reflect_
         real(sp) :: rmsd_err
 
 
@@ -115,6 +116,11 @@ contains
         ! SVD of covariance matrix H -> H = U * S * Vt
         call svd(covariance, S, U, Vt)
 
+        ! Check for reflections in case of real entries.
+        reflect_ = det(matmul(U,Vt)) < zero_sp
+
+        if(reflect_) Vt(d,:) = -Vt(d,:)
+
         ! Optimal rotation matrix.
         do i = 1,d
             do j = 1,d
@@ -124,7 +130,11 @@ contains
 
         ! Scaling factor
         if(scale_) then
-            c = variance_p / (sum(S(1:d)))
+            if(reflect_) then
+                c = variance_p / (sum(S(1:d-1)) - S(d))
+            else
+                c = variance_p / (sum(S(1:d)))
+            end if
         else
             c = one_sp
         end if
@@ -149,9 +159,9 @@ contains
         rmsd = sqrt(rmsd * sum_w)
     end subroutine
     module subroutine kabsch_umeyama_dp(P, Q, R, t, c, rmsd, W, scale)
-        !> Reference point set (d × N)
-        real(dp), intent(in) :: P(:, :)
         !> Target point set (d × N)
+        real(dp), intent(in) :: P(:, :)
+        !> Reference point set (d × N)
         real(dp), intent(in) :: Q(:, :)
         !> Optimal rotation matrix (d × d)
         real(dp), intent(out) :: R(:,:)
@@ -172,6 +182,7 @@ contains
         real(dp) :: sum_w, variance_p
         real(dp), allocatable :: S(:)
         logical :: scale_
+        logical :: reflect_
         real(dp) :: rmsd_err
 
 
@@ -260,6 +271,11 @@ contains
         ! SVD of covariance matrix H -> H = U * S * Vt
         call svd(covariance, S, U, Vt)
 
+        ! Check for reflections in case of real entries.
+        reflect_ = det(matmul(U,Vt)) < zero_dp
+
+        if(reflect_) Vt(d,:) = -Vt(d,:)
+
         ! Optimal rotation matrix.
         do i = 1,d
             do j = 1,d
@@ -269,7 +285,11 @@ contains
 
         ! Scaling factor
         if(scale_) then
-            c = variance_p / (sum(S(1:d)))
+            if(reflect_) then
+                c = variance_p / (sum(S(1:d-1)) - S(d))
+            else
+                c = variance_p / (sum(S(1:d)))
+            end if
         else
             c = one_dp
         end if
@@ -294,9 +314,9 @@ contains
         rmsd = sqrt(rmsd * sum_w)
     end subroutine
     module subroutine kabsch_umeyama_csp(P, Q, R, t, c, rmsd, W, scale)
-        !> Reference point set (d × N)
-        complex(sp), intent(in) :: P(:, :)
         !> Target point set (d × N)
+        complex(sp), intent(in) :: P(:, :)
+        !> Reference point set (d × N)
         complex(sp), intent(in) :: Q(:, :)
         !> Optimal rotation matrix (d × d)
         complex(sp), intent(out) :: R(:,:)
@@ -405,6 +425,9 @@ contains
         ! SVD of covariance matrix H -> H = U * S * Vt
         call svd(covariance, S, U, Vt)
 
+        ! Check for reflections in case of real entries.
+
+
         ! Optimal rotation matrix.
         do i = 1,d
             do j = 1,d
@@ -439,9 +462,9 @@ contains
         rmsd = sqrt(rmsd * sum_w)
     end subroutine
     module subroutine kabsch_umeyama_cdp(P, Q, R, t, c, rmsd, W, scale)
-        !> Reference point set (d × N)
-        complex(dp), intent(in) :: P(:, :)
         !> Target point set (d × N)
+        complex(dp), intent(in) :: P(:, :)
+        !> Reference point set (d × N)
         complex(dp), intent(in) :: Q(:, :)
         !> Optimal rotation matrix (d × d)
         complex(dp), intent(out) :: R(:,:)
@@ -549,6 +572,9 @@ contains
 
         ! SVD of covariance matrix H -> H = U * S * Vt
         call svd(covariance, S, U, Vt)
+
+        ! Check for reflections in case of real entries.
+
 
         ! Optimal rotation matrix.
         do i = 1,d

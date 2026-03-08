@@ -21,9 +21,9 @@ module stdlib_spatial
         !> of P and Q, optionally using weights.
         !-----------------------------------------------------------------------
         module subroutine kabsch_umeyama_sp(P, Q, R, t, c, rmsd, W, scale)
-            !> Reference point set (d × N)
-            real(sp), intent(in) :: P(:, :)
             !> Target point set (d × N)
+            real(sp), intent(in) :: P(:, :)
+            !> Reference point set (d × N)
             real(sp), intent(in) :: Q(:, :)
             !> Optimal rotation matrix (d × d)
             real(sp), intent(out) :: R(:,:)
@@ -39,9 +39,9 @@ module stdlib_spatial
             logical, intent(in), optional :: scale
         end subroutine
         module subroutine kabsch_umeyama_dp(P, Q, R, t, c, rmsd, W, scale)
-            !> Reference point set (d × N)
-            real(dp), intent(in) :: P(:, :)
             !> Target point set (d × N)
+            real(dp), intent(in) :: P(:, :)
+            !> Reference point set (d × N)
             real(dp), intent(in) :: Q(:, :)
             !> Optimal rotation matrix (d × d)
             real(dp), intent(out) :: R(:,:)
@@ -57,9 +57,9 @@ module stdlib_spatial
             logical, intent(in), optional :: scale
         end subroutine
         module subroutine kabsch_umeyama_csp(P, Q, R, t, c, rmsd, W, scale)
-            !> Reference point set (d × N)
-            complex(sp), intent(in) :: P(:, :)
             !> Target point set (d × N)
+            complex(sp), intent(in) :: P(:, :)
+            !> Reference point set (d × N)
             complex(sp), intent(in) :: Q(:, :)
             !> Optimal rotation matrix (d × d)
             complex(sp), intent(out) :: R(:,:)
@@ -75,9 +75,9 @@ module stdlib_spatial
             logical, intent(in), optional :: scale
         end subroutine
         module subroutine kabsch_umeyama_cdp(P, Q, R, t, c, rmsd, W, scale)
-            !> Reference point set (d × N)
-            complex(dp), intent(in) :: P(:, :)
             !> Target point set (d × N)
+            complex(dp), intent(in) :: P(:, :)
+            !> Reference point set (d × N)
             complex(dp), intent(in) :: Q(:, :)
             !> Optimal rotation matrix (d × d)
             complex(dp), intent(out) :: R(:,:)
