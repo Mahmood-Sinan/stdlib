@@ -2,6 +2,7 @@
 #include <limits.h>
 #include <stddef.h>
 #include <stdlib.h>
+#include <stdio.h>
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <string.h>
@@ -66,6 +67,25 @@ int stdlib_make_directory(const char* path){
 #endif /* ifdef _WIN32 */
     
     return (!code) ? 0 : errno;
+}
+
+// Wrapper to the platform's `rename` call.
+// Uses `rename` on unix, `MoveFileExA` on windows.
+// Returns 0 if successful, otherwise returns the `errno`.
+int stdlib_move_file(const char* src, const char* dest) {
+#ifdef _WIN32
+    if (MoveFileExA(src, dest, MOVEFILE_REPLACE_EXISTING)) {
+        return 0;
+    } else {
+        return (int)GetLastError();
+    }
+#else
+    if (rename(src, dest) == 0) {
+        return 0;
+    } else {
+        return errno;
+    }
+#endif
 }
 
 // Wrapper to the platform's `rmdir`(remove directory) call.

@@ -305,7 +305,7 @@ public :: is_symlink
 !! It supports common operating systems such as Linux, macOS, Windows, and various UNIX-like environments.
 !!
 public :: is_file
-     
+public :: move_file
 ! CPU clock ticks storage
 integer, parameter, private :: TICKS = int64
 integer, parameter, private :: RTICKS = dp
@@ -1118,6 +1118,29 @@ subroutine make_directory_all(path, err)
         indx = find(path, sep, i)
     end do
 end subroutine make_directory_all
+
+subroutine move_file(src, dest, err)
+    character(*), intent(in) :: src, dest
+    type(state_type), optional, intent(out) :: err
+
+    integer :: code
+    type(state_type) :: err0
+
+    interface
+        integer function stdlib_move_file(csrc, cdest) bind(C, name='stdlib_move_file')
+            import c_char
+            character(kind=c_char), intent(in) :: csrc(*)
+            character(kind=c_char), intent(in) :: cdest(*)
+        end function stdlib_move_file
+    end interface
+
+    code = stdlib_move_file(to_c_char(trim(src)), to_c_char(trim(dest)))
+
+    if (code /= 0) then
+        err0 = FS_ERROR_CODE(code, c_get_strerror())
+        call err0%handle(err)
+    end if
+end subroutine move_file
 
 !! removes an empty directory
 subroutine remove_directory(path, err)

@@ -1,7 +1,7 @@
 module test_filesystem
     use testdrive, only : new_unittest, unittest_type, error_type, check, skip_test
     use stdlib_system, only: is_directory, delete_file, FS_ERROR, FS_ERROR_CODE, &
-        make_directory, remove_directory, make_directory_all, is_windows, OS_TYPE, &
+        make_directory, remove_directory, make_directory_all, move_file, is_windows, OS_TYPE, &
         OS_WINDOWS, get_cwd, set_cwd, operator(/), exists, fs_type_unknown, &
         fs_type_regular_file, fs_type_directory, fs_type_symlink, is_file
     use stdlib_error, only: state_type, STDLIB_FS_ERROR
@@ -31,6 +31,7 @@ contains
             new_unittest("fs_make_dir", test_make_directory), &
             new_unittest("fs_make_dir_existing_dir", test_make_directory_existing), &
             new_unittest("fs_make_dir_all", test_make_directory_all), &
+            new_unittest("fs_move_file", test_move_file), &
             new_unittest("fs_remove_dir", test_remove_directory), &
             new_unittest("fs_remove_dir_non_existent", test_remove_directory_nonexistent), &
             new_unittest("fs_cwd", test_cwd) &
@@ -454,6 +455,51 @@ contains
 
         call check(error, ios==0 .and. iocmd==0, 'Cannot cleanup make_directory_all test: '//trim(msg))
     end subroutine test_make_directory_all
+
+    subroutine test_move_file(error)
+        type(error_type), allocatable, intent(out) :: error
+        type(state_type) :: err
+        character(len=256) :: filename
+        character(len=256) :: src
+        character(len=256) :: dest
+        integer :: ios,iunit,iocmd
+        character(len=512) :: msg
+
+        filename = 'text_file.txt'
+
+        if (OS_TYPE() == OS_WINDOWS) then
+            src = "d1\d2\d3\d4\"
+            dest = "d5\d6\d7\d8\"
+        else
+            src = "d1/d2/d3/d4/"
+            dest = "d5/d6/d7/d8/"
+        end if
+
+        call execute_command_line('mkdir -p ' // src, exitstat=ios, cmdstat=iocmd, cmdmsg=msg)
+        call check(error, ios==0 .and. iocmd==0, 'Cannot init move_file test: '//trim(msg))
+        if (allocated(error)) return
+
+        open(unit=iunit, file=src // filename, action="replace", iostat=ios, iomsg=msg)
+        call check(error, ios == 0, "Cannot create test_file.txt: " // trim(msg))
+        if (allocated(error)) return
+
+        call execute_command_line('mkdir -p ' //dest, exitstat=ios, cmdstat=iocmd, cmdmsg=msg)
+        call check(error, ios==0 .and. iocmd==0, 'Cannot create destination directory: '//trim(msg))
+        if (allocated(error)) return
+
+        call move_file(src // filename, dest // filename, err)
+        call check(error, err%ok(), 'Error while moving file:  '//err%print())
+        if(allocated(error)) return
+
+        ! clean up: remove the empty directory
+        if (is_windows()) then
+            call execute_command_line('rmdir /s /q d1 d5', exitstat=ios, cmdstat=iocmd, cmdmsg=msg)
+        else
+            call execute_command_line('rm -rf d1 d5', exitstat=ios, cmdstat=iocmd, cmdmsg=msg)
+        end if
+
+        call check(error, ios==0 .and. iocmd==0, 'Cannot cleanup move_file test: '//trim(msg))
+    end subroutine test_move_file
 
     subroutine test_remove_directory(error)
         type(error_type), allocatable, intent(out) :: error

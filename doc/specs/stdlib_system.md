@@ -689,6 +689,45 @@ Subroutine
 
 ---
 
+## `move_file` - Move or rename a file
+
+### Status
+
+Experimental
+
+### Description
+
+It moves or renames a file from a source path to a destination path.
+It is designed to work across multiple platforms. On Windows, paths with both forward `/` and backward `\` slashes are accepted.
+
+### Syntax
+
+`call [[stdlib_system(module):move_file(subroutine)]] (src, dest, [,err])`
+
+### Class
+
+Subroutine
+
+### Arguments
+
+`src`: Shall be a character string containing the path and filename of the source file. It is an `intent(in)` argument.
+
+`dest`: Shall be a character string containing the path and filename of the destination. It is an `intent(in)` argument.
+
+`err`(optional): Shall be of type `state_type`, and is used for error handling. It is an `optional, intent(out)` argument.
+
+### Return values
+
+`err` is an optional state return flag. If not requested and an error occurs, an `FS_ERROR` will trigger an error stop.
+
+### Example
+
+```fortran
+{!example/system/example_move_file.f90!}
+```
+
+---
+
 ## `remove_directory` - Removes an empty directory
 
 ### Status
