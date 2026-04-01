@@ -26,7 +26,7 @@ module stdlib_spatial
             !> Reference point set (d × N)
             real(sp), intent(in) :: Q(:, :)
             !> Optimal rotation matrix (d × d)
-            real(sp), intent(out) :: R(:,:)
+            real(sp), intent(out) :: R(:, :)
             !> Translation vector (d)
             real(sp), intent(out) :: t(:)
             !> Scale factor
@@ -44,7 +44,7 @@ module stdlib_spatial
             !> Reference point set (d × N)
             real(dp), intent(in) :: Q(:, :)
             !> Optimal rotation matrix (d × d)
-            real(dp), intent(out) :: R(:,:)
+            real(dp), intent(out) :: R(:, :)
             !> Translation vector (d)
             real(dp), intent(out) :: t(:)
             !> Scale factor
@@ -62,7 +62,7 @@ module stdlib_spatial
             !> Reference point set (d × N)
             complex(sp), intent(in) :: Q(:, :)
             !> Optimal rotation matrix (d × d)
-            complex(sp), intent(out) :: R(:,:)
+            complex(sp), intent(out) :: R(:, :)
             !> Translation vector (d)
             complex(sp), intent(out) :: t(:)
             !> Scale factor
@@ -80,7 +80,7 @@ module stdlib_spatial
             !> Reference point set (d × N)
             complex(dp), intent(in) :: Q(:, :)
             !> Optimal rotation matrix (d × d)
-            complex(dp), intent(out) :: R(:,:)
+            complex(dp), intent(out) :: R(:, :)
             !> Translation vector (d)
             complex(dp), intent(out) :: t(:)
             !> Scale factor
