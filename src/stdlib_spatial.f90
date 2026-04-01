@@ -1,7 +1,6 @@
 module stdlib_spatial
-    use stdlib_linalg_constants
+    use stdlib_kinds, only: sp, dp, xdp, qp
     use stdlib_constants
-    use stdlib_error, only: error_stop
     implicit none
     private
     public :: kabsch_umeyama
