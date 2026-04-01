@@ -47,6 +47,8 @@ contains
                 R(i,j) = stdlib_dot_product_kahan(U(i,:), Vt(:, j))
             end do
         end do
+        ! For real cases, only det(R) = +1 can be checked. Because if det(R) = -1, then algorithm will
+        ! find a rotation matrix without reflection in which rmsd is minimized.
         if(det(R) < zero_sp) R(:, d) = -R(:, d)
 
         ! Random scale and translation
@@ -87,6 +89,8 @@ contains
                 R(i,j) = stdlib_dot_product_kahan(U(i,:), Vt(:, j))
             end do
         end do
+        ! For real cases, only det(R) = +1 can be checked. Because if det(R) = -1, then algorithm will
+        ! find a rotation matrix without reflection in which rmsd is minimized.
         if(det(R) < zero_dp) R(:, d) = -R(:, d)
 
         ! Random scale and translation
