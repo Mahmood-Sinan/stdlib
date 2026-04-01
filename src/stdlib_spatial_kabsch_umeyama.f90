@@ -1,6 +1,7 @@
 submodule(stdlib_spatial) stdlib_spatial_kabsch_umeyama
     use stdlib_linalg, only: svd, det
     use stdlib_intrinsics, only: stdlib_sum_kahan, stdlib_dot_product_kahan, kahan_kernel
+    use stdlib_error, only: error_stop
 
 contains
     module subroutine kabsch_umeyama_sp(P, Q, R, t, c, rmsd, W, scale)
@@ -22,7 +23,7 @@ contains
         logical, intent(in), optional :: scale
 
         ! Internal variables.
-        integer(ilp) :: i, j, point, d, N
+        integer :: i, j, point, d, N
         real(sp), allocatable :: covariance(:,:), U(:,:), Vt(:,:), vec(:), tmp_N(:), tmp_d(:), c_P(:), c_Q(:)
         real(sp) :: sum_w, variance_p
         real(sp), allocatable :: S(:)
@@ -178,7 +179,7 @@ contains
         logical, intent(in), optional :: scale
 
         ! Internal variables.
-        integer(ilp) :: i, j, point, d, N
+        integer :: i, j, point, d, N
         real(dp), allocatable :: covariance(:,:), U(:,:), Vt(:,:), vec(:), tmp_N(:), tmp_d(:), c_P(:), c_Q(:)
         real(dp) :: sum_w, variance_p
         real(dp), allocatable :: S(:)
@@ -334,7 +335,7 @@ contains
         logical, intent(in), optional :: scale
 
         ! Internal variables.
-        integer(ilp) :: i, j, point, d, N
+        integer :: i, j, point, d, N
         complex(sp), allocatable :: covariance(:,:), U(:,:), Vt(:,:), vec(:), tmp_N(:), tmp_d(:), c_P(:), c_Q(:)
         real(sp) :: sum_w, variance_p
         real(sp), allocatable :: S(:)
@@ -483,7 +484,7 @@ contains
         logical, intent(in), optional :: scale
 
         ! Internal variables.
-        integer(ilp) :: i, j, point, d, N
+        integer :: i, j, point, d, N
         complex(dp), allocatable :: covariance(:,:), U(:,:), Vt(:,:), vec(:), tmp_N(:), tmp_d(:), c_P(:), c_Q(:)
         real(dp) :: sum_w, variance_p
         real(dp), allocatable :: S(:)
