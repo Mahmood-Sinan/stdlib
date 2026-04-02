@@ -865,8 +865,6 @@ contains
         call check(error, size(diff(B, 2)), 0, "size(diff(B, 2)) in test_diff_real_sp failed")
         if (allocated(error)) return
         call check(error, size(diff(B, 3)), 0, "size(diff(B, 3)) in test_diff_real_sp failed")
-        if (allocated(error)) return
-
         
     end subroutine test_diff_real_sp
     subroutine test_diff_real_dp(error)
@@ -911,8 +909,6 @@ contains
         call check(error, size(diff(B, 2)), 0, "size(diff(B, 2)) in test_diff_real_dp failed")
         if (allocated(error)) return
         call check(error, size(diff(B, 3)), 0, "size(diff(B, 3)) in test_diff_real_dp failed")
-        if (allocated(error)) return
-
         
     end subroutine test_diff_real_dp
     
