@@ -10,7 +10,6 @@ module test_kabsch_umeyama
 
 contains
 
-
     !> Collect all exported unit tests
     subroutine collect_suite(testsuite)
         !> Collection of tests
