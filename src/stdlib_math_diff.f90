@@ -72,26 +72,18 @@ contains
         
         size_prepend = 0
         size_append = 0
-        
-        dim_ = 1
         if (present(dim)) then
-            if (dim == 1 .or. dim == 2) dim_ = dim
-        end if
-
-        if (present(prepend)) then
-            if (size(prepend, 3 - dim_) /= size(x, 3 - dim_)) then
-                error stop "stdlib_math_diff: non-differencing dimension of 'prepend' must match 'x'"
+            if (dim == 1 .or. dim == 2) then
+                dim_ = dim
+            else
+                dim_ = 1
             end if
-            size_prepend = size(prepend, dim_)
+        else
+            dim_ = 1
         end if
         
-        if (present(append)) then
-            if (size(append, 3 - dim_) /= size(x, 3 - dim_)) then
-                error stop "stdlib_math_diff: non-differencing dimension of 'append' must match 'x'"
-            end if
-            size_append = size(append, dim_)
-        end if
-        
+        if (present(prepend)) size_prepend = size(prepend, dim_)
+        if (present(append)) size_append = size(append, dim_)
         size_x = size(x, dim_)
         size_work = size_x + size_prepend + size_append
         
@@ -101,6 +93,8 @@ contains
                 allocate(y(0, size(x, 2)))
             case (2)
                 allocate(y(size(x, 1), 0))
+            case default
+                error stop "diff_2: internal error: invalid dimension (dim_ must be 1 or 2)"
             end select
             return
         end if
@@ -207,26 +201,18 @@ contains
         
         size_prepend = 0
         size_append = 0
-        
-        dim_ = 1
         if (present(dim)) then
-            if (dim == 1 .or. dim == 2) dim_ = dim
-        end if
-
-        if (present(prepend)) then
-            if (size(prepend, 3 - dim_) /= size(x, 3 - dim_)) then
-                error stop "stdlib_math_diff: non-differencing dimension of 'prepend' must match 'x'"
+            if (dim == 1 .or. dim == 2) then
+                dim_ = dim
+            else
+                dim_ = 1
             end if
-            size_prepend = size(prepend, dim_)
+        else
+            dim_ = 1
         end if
         
-        if (present(append)) then
-            if (size(append, 3 - dim_) /= size(x, 3 - dim_)) then
-                error stop "stdlib_math_diff: non-differencing dimension of 'append' must match 'x'"
-            end if
-            size_append = size(append, dim_)
-        end if
-        
+        if (present(prepend)) size_prepend = size(prepend, dim_)
+        if (present(append)) size_append = size(append, dim_)
         size_x = size(x, dim_)
         size_work = size_x + size_prepend + size_append
         
@@ -236,6 +222,8 @@ contains
                 allocate(y(0, size(x, 2)))
             case (2)
                 allocate(y(size(x, 1), 0))
+            case default
+                error stop "diff_2: internal error: invalid dimension (dim_ must be 1 or 2)"
             end select
             return
         end if
@@ -342,26 +330,18 @@ contains
         
         size_prepend = 0
         size_append = 0
-        
-        dim_ = 1
         if (present(dim)) then
-            if (dim == 1 .or. dim == 2) dim_ = dim
-        end if
-
-        if (present(prepend)) then
-            if (size(prepend, 3 - dim_) /= size(x, 3 - dim_)) then
-                error stop "stdlib_math_diff: non-differencing dimension of 'prepend' must match 'x'"
+            if (dim == 1 .or. dim == 2) then
+                dim_ = dim
+            else
+                dim_ = 1
             end if
-            size_prepend = size(prepend, dim_)
+        else
+            dim_ = 1
         end if
         
-        if (present(append)) then
-            if (size(append, 3 - dim_) /= size(x, 3 - dim_)) then
-                error stop "stdlib_math_diff: non-differencing dimension of 'append' must match 'x'"
-            end if
-            size_append = size(append, dim_)
-        end if
-        
+        if (present(prepend)) size_prepend = size(prepend, dim_)
+        if (present(append)) size_append = size(append, dim_)
         size_x = size(x, dim_)
         size_work = size_x + size_prepend + size_append
         
@@ -371,6 +351,8 @@ contains
                 allocate(y(0, size(x, 2)))
             case (2)
                 allocate(y(size(x, 1), 0))
+            case default
+                error stop "diff_2: internal error: invalid dimension (dim_ must be 1 or 2)"
             end select
             return
         end if
@@ -477,26 +459,18 @@ contains
         
         size_prepend = 0
         size_append = 0
-        
-        dim_ = 1
         if (present(dim)) then
-            if (dim == 1 .or. dim == 2) dim_ = dim
-        end if
-
-        if (present(prepend)) then
-            if (size(prepend, 3 - dim_) /= size(x, 3 - dim_)) then
-                error stop "stdlib_math_diff: non-differencing dimension of 'prepend' must match 'x'"
+            if (dim == 1 .or. dim == 2) then
+                dim_ = dim
+            else
+                dim_ = 1
             end if
-            size_prepend = size(prepend, dim_)
+        else
+            dim_ = 1
         end if
         
-        if (present(append)) then
-            if (size(append, 3 - dim_) /= size(x, 3 - dim_)) then
-                error stop "stdlib_math_diff: non-differencing dimension of 'append' must match 'x'"
-            end if
-            size_append = size(append, dim_)
-        end if
-        
+        if (present(prepend)) size_prepend = size(prepend, dim_)
+        if (present(append)) size_append = size(append, dim_)
         size_x = size(x, dim_)
         size_work = size_x + size_prepend + size_append
         
@@ -506,6 +480,8 @@ contains
                 allocate(y(0, size(x, 2)))
             case (2)
                 allocate(y(size(x, 1), 0))
+            case default
+                error stop "diff_2: internal error: invalid dimension (dim_ must be 1 or 2)"
             end select
             return
         end if
@@ -612,26 +588,18 @@ contains
         
         size_prepend = 0
         size_append = 0
-        
-        dim_ = 1
         if (present(dim)) then
-            if (dim == 1 .or. dim == 2) dim_ = dim
-        end if
-
-        if (present(prepend)) then
-            if (size(prepend, 3 - dim_) /= size(x, 3 - dim_)) then
-                error stop "stdlib_math_diff: non-differencing dimension of 'prepend' must match 'x'"
+            if (dim == 1 .or. dim == 2) then
+                dim_ = dim
+            else
+                dim_ = 1
             end if
-            size_prepend = size(prepend, dim_)
+        else
+            dim_ = 1
         end if
         
-        if (present(append)) then
-            if (size(append, 3 - dim_) /= size(x, 3 - dim_)) then
-                error stop "stdlib_math_diff: non-differencing dimension of 'append' must match 'x'"
-            end if
-            size_append = size(append, dim_)
-        end if
-        
+        if (present(prepend)) size_prepend = size(prepend, dim_)
+        if (present(append)) size_append = size(append, dim_)
         size_x = size(x, dim_)
         size_work = size_x + size_prepend + size_append
         
@@ -641,6 +609,8 @@ contains
                 allocate(y(0, size(x, 2)))
             case (2)
                 allocate(y(size(x, 1), 0))
+            case default
+                error stop "diff_2: internal error: invalid dimension (dim_ must be 1 or 2)"
             end select
             return
         end if
@@ -747,26 +717,18 @@ contains
         
         size_prepend = 0
         size_append = 0
-        
-        dim_ = 1
         if (present(dim)) then
-            if (dim == 1 .or. dim == 2) dim_ = dim
-        end if
-
-        if (present(prepend)) then
-            if (size(prepend, 3 - dim_) /= size(x, 3 - dim_)) then
-                error stop "stdlib_math_diff: non-differencing dimension of 'prepend' must match 'x'"
+            if (dim == 1 .or. dim == 2) then
+                dim_ = dim
+            else
+                dim_ = 1
             end if
-            size_prepend = size(prepend, dim_)
+        else
+            dim_ = 1
         end if
         
-        if (present(append)) then
-            if (size(append, 3 - dim_) /= size(x, 3 - dim_)) then
-                error stop "stdlib_math_diff: non-differencing dimension of 'append' must match 'x'"
-            end if
-            size_append = size(append, dim_)
-        end if
-        
+        if (present(prepend)) size_prepend = size(prepend, dim_)
+        if (present(append)) size_append = size(append, dim_)
         size_x = size(x, dim_)
         size_work = size_x + size_prepend + size_append
         
@@ -776,6 +738,8 @@ contains
                 allocate(y(0, size(x, 2)))
             case (2)
                 allocate(y(size(x, 1), 0))
+            case default
+                error stop "diff_2: internal error: invalid dimension (dim_ must be 1 or 2)"
             end select
             return
         end if
