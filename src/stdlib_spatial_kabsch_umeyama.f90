@@ -86,12 +86,9 @@ contains
             end do
             tmp_N(:) = W(:) * tmp_N(:)
             variance_p = stdlib_sum_kahan(tmp_N)
-            do j = 1, d
-                do i = 1, d
-                    tmp_N(:) = W(:) * (P(i,:) - c_P(i)) * (Q(j,:) - c_Q(j))
-                    covariance(i,j) = stdlib_sum_kahan(tmp_N)
-                end do
-            end do
+            do concurrent( j=1:d, i=1:d)
+                covariance(i, j) = stdlib_dot_product_kahan(Q(j, :) - c_Q(j), W*(P(i, :) - c_P(i)))
+            enddo
         else
             ! Calculate variance by the formula (1/n)*sigma(P - c_P)^2
             do point = 1, N
@@ -101,7 +98,7 @@ contains
             variance_p = stdlib_sum_kahan(tmp_N)
             do j = 1, d
                 do i = 1, d
-                    covariance(i,j) = stdlib_dot_product_kahan((P(i,:) - c_P(i)),(Q(j,:) - c_Q(j)))
+                    covariance(i,j) = stdlib_dot_product_kahan((P(i,:) - c_P(i)), (Q(j,:) - c_Q(j)))
                 end do
             end do
         end if
@@ -232,12 +229,9 @@ contains
             end do
             tmp_N(:) = W(:) * tmp_N(:)
             variance_p = stdlib_sum_kahan(tmp_N)
-            do j = 1, d
-                do i = 1, d
-                    tmp_N(:) = W(:) * (P(i,:) - c_P(i)) * (Q(j,:) - c_Q(j))
-                    covariance(i,j) = stdlib_sum_kahan(tmp_N)
-                end do
-            end do
+            do concurrent( j=1:d, i=1:d)
+                covariance(i, j) = stdlib_dot_product_kahan(Q(j, :) - c_Q(j), W*(P(i, :) - c_P(i)))
+            enddo
         else
             ! Calculate variance by the formula (1/n)*sigma(P - c_P)^2
             do point = 1, N
@@ -247,7 +241,7 @@ contains
             variance_p = stdlib_sum_kahan(tmp_N)
             do j = 1, d
                 do i = 1, d
-                    covariance(i,j) = stdlib_dot_product_kahan((P(i,:) - c_P(i)),(Q(j,:) - c_Q(j)))
+                    covariance(i,j) = stdlib_dot_product_kahan((P(i,:) - c_P(i)), (Q(j,:) - c_Q(j)))
                 end do
             end do
         end if
@@ -378,12 +372,9 @@ contains
             end do
             tmp_N(:) = W(:) * tmp_N(:)
             variance_p = stdlib_sum_kahan(tmp_N)
-            do j = 1, d
-                do i = 1, d
-                    tmp_N(:) = W(:) * (P(i,:) - c_P(i)) * conjg(Q(j,:) - c_Q(j))
-                    covariance(i,j) = stdlib_sum_kahan(tmp_N)
-                end do
-            end do
+            do concurrent( j=1:d, i=1:d)
+                covariance(i, j) = stdlib_dot_product_kahan(Q(j, :) - c_Q(j), W*(P(i, :) - c_P(i)))
+            enddo
         else
             ! Calculate variance by the formula (1/n)*sigma(P - c_P)^2
             do point = 1, N
@@ -519,12 +510,9 @@ contains
             end do
             tmp_N(:) = W(:) * tmp_N(:)
             variance_p = stdlib_sum_kahan(tmp_N)
-            do j = 1, d
-                do i = 1, d
-                    tmp_N(:) = W(:) * (P(i,:) - c_P(i)) * conjg(Q(j,:) - c_Q(j))
-                    covariance(i,j) = stdlib_sum_kahan(tmp_N)
-                end do
-            end do
+            do concurrent( j=1:d, i=1:d)
+                covariance(i, j) = stdlib_dot_product_kahan(Q(j, :) - c_Q(j), W*(P(i, :) - c_P(i)))
+            enddo
         else
             ! Calculate variance by the formula (1/n)*sigma(P - c_P)^2
             do point = 1, N
