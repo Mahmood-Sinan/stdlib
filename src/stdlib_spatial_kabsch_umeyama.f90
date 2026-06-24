@@ -96,11 +96,9 @@ contains
                 tmp_N(point) = stdlib_dot_product_kahan(tmp_d, tmp_d)
             end do
             variance_p = stdlib_sum_kahan(tmp_N)
-            do j = 1, d
-                do i = 1, d
-                    covariance(i,j) = stdlib_dot_product_kahan((P(i,:) - c_P(i)), (Q(j,:) - c_Q(j)))
-                end do
-            end do
+            do concurrent( j=1:d, i=1:d)
+                covariance(i,j) = stdlib_dot_product_kahan((Q(j,:) - c_Q(j)), (P(i,:) - c_P(i)))
+            enddo
         end if
 
         covariance = covariance * sum_w
@@ -239,11 +237,9 @@ contains
                 tmp_N(point) = stdlib_dot_product_kahan(tmp_d, tmp_d)
             end do
             variance_p = stdlib_sum_kahan(tmp_N)
-            do j = 1, d
-                do i = 1, d
-                    covariance(i,j) = stdlib_dot_product_kahan((P(i,:) - c_P(i)), (Q(j,:) - c_Q(j)))
-                end do
-            end do
+            do concurrent( j=1:d, i=1:d)
+                covariance(i,j) = stdlib_dot_product_kahan((Q(j,:) - c_Q(j)), (P(i,:) - c_P(i)))
+            enddo
         end if
 
         covariance = covariance * sum_w
@@ -382,11 +378,9 @@ contains
                 tmp_N(point) = stdlib_dot_product_kahan(tmp_d, tmp_d)
             end do
             variance_p = stdlib_sum_kahan(tmp_N)
-            do j = 1, d
-                do i = 1, d
-                    covariance(i,j) = stdlib_dot_product_kahan((Q(j,:) - c_Q(j)), (P(i,:) - c_P(i)))
-                end do
-            end do
+            do concurrent( j=1:d, i=1:d)
+                covariance(i,j) = stdlib_dot_product_kahan((Q(j,:) - c_Q(j)), (P(i,:) - c_P(i)))
+            enddo
         end if
 
         covariance = covariance * sum_w
@@ -520,11 +514,9 @@ contains
                 tmp_N(point) = stdlib_dot_product_kahan(tmp_d, tmp_d)
             end do
             variance_p = stdlib_sum_kahan(tmp_N)
-            do j = 1, d
-                do i = 1, d
-                    covariance(i,j) = stdlib_dot_product_kahan((Q(j,:) - c_Q(j)), (P(i,:) - c_P(i)))
-                end do
-            end do
+            do concurrent( j=1:d, i=1:d)
+                covariance(i,j) = stdlib_dot_product_kahan((Q(j,:) - c_Q(j)), (P(i,:) - c_P(i)))
+            enddo
         end if
 
         covariance = covariance * sum_w
