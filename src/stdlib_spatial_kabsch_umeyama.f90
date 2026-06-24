@@ -101,8 +101,7 @@ contains
             variance_p = stdlib_sum_kahan(tmp_N)
             do j = 1, d
                 do i = 1, d
-                    tmp_N(:) = (P(i,:) - c_P(i)) * (Q(j,:) - c_Q(j))
-                    covariance(i,j) = stdlib_sum_kahan(tmp_N)
+                    covariance(i,j) = stdlib_dot_product_kahan((P(i,:) - c_P(i)),(Q(j,:) - c_Q(j)))
                 end do
             end do
         end if
@@ -248,8 +247,7 @@ contains
             variance_p = stdlib_sum_kahan(tmp_N)
             do j = 1, d
                 do i = 1, d
-                    tmp_N(:) = (P(i,:) - c_P(i)) * (Q(j,:) - c_Q(j))
-                    covariance(i,j) = stdlib_sum_kahan(tmp_N)
+                    covariance(i,j) = stdlib_dot_product_kahan((P(i,:) - c_P(i)),(Q(j,:) - c_Q(j)))
                 end do
             end do
         end if
@@ -395,8 +393,7 @@ contains
             variance_p = stdlib_sum_kahan(tmp_N)
             do j = 1, d
                 do i = 1, d
-                    tmp_N(:) = (P(i,:) - c_P(i)) * conjg(Q(j,:) - c_Q(j))
-                    covariance(i,j) = stdlib_sum_kahan(tmp_N)
+                    covariance(i,j) = stdlib_dot_product_kahan((Q(j,:) - c_Q(j)), (P(i,:) - c_P(i)))
                 end do
             end do
         end if
@@ -537,8 +534,7 @@ contains
             variance_p = stdlib_sum_kahan(tmp_N)
             do j = 1, d
                 do i = 1, d
-                    tmp_N(:) = (P(i,:) - c_P(i)) * conjg(Q(j,:) - c_Q(j))
-                    covariance(i,j) = stdlib_sum_kahan(tmp_N)
+                    covariance(i,j) = stdlib_dot_product_kahan((Q(j,:) - c_Q(j)), (P(i,:) - c_P(i)))
                 end do
             end do
         end if
