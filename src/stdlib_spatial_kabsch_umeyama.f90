@@ -3,7 +3,7 @@ submodule(stdlib_spatial) stdlib_spatial_kabsch_umeyama
     use stdlib_intrinsics, only: stdlib_sum_kahan, stdlib_dot_product_kahan, kahan_kernel
     use stdlib_error, only: error_stop
     use stdlib_optval, only: optval
-    use stdlib_linalg_lapack, only: gemm, gemv
+    use stdlib_linalg_lapack, only: gemm, gemv, ger, gerc
 
 contains
     module subroutine kabsch_umeyama_sp(P, Q, R, t, c, rmsd, W, scale)
@@ -25,8 +25,8 @@ contains
         !! Enable scaling
 
         ! Internal variables.
-        integer :: i, j, point, d, N
-        real(sp), allocatable :: covariance(:,:), U(:,:), Vt(:,:), vec(:), tmp_N(:), tmp_d(:), c_P(:), c_Q(:)
+        integer :: i, point, d, N
+        real(sp), allocatable :: covariance(:,:), U(:,:), Vt(:,:), vec(:), tmp_N(:), tmp_d1(:), tmp_d2(:), c_P(:), c_Q(:)
         real(sp) :: sum_w, variance_p
         real(sp), allocatable :: S(:)
         real(sp) :: temp
@@ -75,37 +75,35 @@ contains
         c_Q = c_Q * sum_w
 
         ! Compute covariance matrix H = (P - c_P) * (Q - c_Q)^T and variance of P
-        allocate(covariance(d,d), source=zero_sp)
-        allocate(tmp_d(d), source=zero_sp)
+        allocate(covariance(d,d),tmp_d1(d), tmp_d2(d), source=zero_sp)
         variance_p = zero_sp
 
         if (present(W)) then
+            ! Calculate the weighted variance by the formula (1/sum(w))*sum(w_i*(P_i - c_P)^2)
             do point = 1, N
-                tmp_d = P(:, point) - c_P(:)
-                tmp_N(point) = stdlib_dot_product_kahan(tmp_d, tmp_d)
+                tmp_d1 = P(:, point) - c_P(:)
+                tmp_N(point) = W(point) * stdlib_dot_product_kahan(tmp_d1, tmp_d1)
+                tmp_d2 = Q(:, point) - c_Q(:)
+
+                call ger(d, d, W(point), tmp_d1, 1, tmp_d2, 1, covariance, d)
             end do
-            tmp_N(:) = W(:) * tmp_N(:)
             variance_p = stdlib_sum_kahan(tmp_N)
-            do concurrent( j=1:d, i=1:d)
-                covariance(i, j) = stdlib_dot_product_kahan(Q(j, :) - c_Q(j), W*(P(i, :) - c_P(i)))
-            enddo
         else
-            ! Calculate variance by the formula (1/n)*sigma(P - c_P)^2
+            ! Calculate variance by the formula (1/n)*sum(P_i - c_P)^2
             do point = 1, N
-                tmp_d = P(:, point) - c_P(:)
-                tmp_N(point) = stdlib_dot_product_kahan(tmp_d, tmp_d)
+                tmp_d1 = P(:, point) - c_P(:)
+                tmp_N(point) = stdlib_dot_product_kahan(tmp_d1, tmp_d1)
+                tmp_d2 = Q(:, point) - c_Q(:)
+
+                call ger(d, d, one_sp, tmp_d1, 1, tmp_d2, 1, covariance, d)
             end do
             variance_p = stdlib_sum_kahan(tmp_N)
-            do concurrent( j=1:d, i=1:d)
-                covariance(i,j) = stdlib_dot_product_kahan((Q(j,:) - c_Q(j)), (P(i,:) - c_P(i)))
-            enddo
         end if
 
         covariance = covariance * sum_w
         variance_p = variance_p * sum_w
 
-        allocate(U(d,d), source=zero_sp)
-        allocate(Vt(d,d), source=zero_sp)
+        allocate(U(d,d), Vt(d,d), source=zero_sp)
         allocate(S(d), source=zero_sp)
 
         ! SVD of covariance matrix H -> H = U * S * Vt
@@ -166,8 +164,8 @@ contains
         !! Enable scaling
 
         ! Internal variables.
-        integer :: i, j, point, d, N
-        real(dp), allocatable :: covariance(:,:), U(:,:), Vt(:,:), vec(:), tmp_N(:), tmp_d(:), c_P(:), c_Q(:)
+        integer :: i, point, d, N
+        real(dp), allocatable :: covariance(:,:), U(:,:), Vt(:,:), vec(:), tmp_N(:), tmp_d1(:), tmp_d2(:), c_P(:), c_Q(:)
         real(dp) :: sum_w, variance_p
         real(dp), allocatable :: S(:)
         real(dp) :: temp
@@ -216,37 +214,35 @@ contains
         c_Q = c_Q * sum_w
 
         ! Compute covariance matrix H = (P - c_P) * (Q - c_Q)^T and variance of P
-        allocate(covariance(d,d), source=zero_dp)
-        allocate(tmp_d(d), source=zero_dp)
+        allocate(covariance(d,d),tmp_d1(d), tmp_d2(d), source=zero_dp)
         variance_p = zero_dp
 
         if (present(W)) then
+            ! Calculate the weighted variance by the formula (1/sum(w))*sum(w_i*(P_i - c_P)^2)
             do point = 1, N
-                tmp_d = P(:, point) - c_P(:)
-                tmp_N(point) = stdlib_dot_product_kahan(tmp_d, tmp_d)
+                tmp_d1 = P(:, point) - c_P(:)
+                tmp_N(point) = W(point) * stdlib_dot_product_kahan(tmp_d1, tmp_d1)
+                tmp_d2 = Q(:, point) - c_Q(:)
+
+                call ger(d, d, W(point), tmp_d1, 1, tmp_d2, 1, covariance, d)
             end do
-            tmp_N(:) = W(:) * tmp_N(:)
             variance_p = stdlib_sum_kahan(tmp_N)
-            do concurrent( j=1:d, i=1:d)
-                covariance(i, j) = stdlib_dot_product_kahan(Q(j, :) - c_Q(j), W*(P(i, :) - c_P(i)))
-            enddo
         else
-            ! Calculate variance by the formula (1/n)*sigma(P - c_P)^2
+            ! Calculate variance by the formula (1/n)*sum(P_i - c_P)^2
             do point = 1, N
-                tmp_d = P(:, point) - c_P(:)
-                tmp_N(point) = stdlib_dot_product_kahan(tmp_d, tmp_d)
+                tmp_d1 = P(:, point) - c_P(:)
+                tmp_N(point) = stdlib_dot_product_kahan(tmp_d1, tmp_d1)
+                tmp_d2 = Q(:, point) - c_Q(:)
+
+                call ger(d, d, one_dp, tmp_d1, 1, tmp_d2, 1, covariance, d)
             end do
             variance_p = stdlib_sum_kahan(tmp_N)
-            do concurrent( j=1:d, i=1:d)
-                covariance(i,j) = stdlib_dot_product_kahan((Q(j,:) - c_Q(j)), (P(i,:) - c_P(i)))
-            enddo
         end if
 
         covariance = covariance * sum_w
         variance_p = variance_p * sum_w
 
-        allocate(U(d,d), source=zero_dp)
-        allocate(Vt(d,d), source=zero_dp)
+        allocate(U(d,d), Vt(d,d), source=zero_dp)
         allocate(S(d), source=zero_dp)
 
         ! SVD of covariance matrix H -> H = U * S * Vt
@@ -307,8 +303,8 @@ contains
         !! Enable scaling
 
         ! Internal variables.
-        integer :: i, j, point, d, N
-        complex(sp), allocatable :: covariance(:,:), U(:,:), Vt(:,:), vec(:), tmp_N(:), tmp_d(:), c_P(:), c_Q(:)
+        integer :: i, point, d, N
+        complex(sp), allocatable :: covariance(:,:), U(:,:), Vt(:,:), vec(:), tmp_N(:), tmp_d1(:), tmp_d2(:), c_P(:), c_Q(:)
         real(sp) :: sum_w, variance_p
         real(sp), allocatable :: S(:)
         complex(sp) :: temp
@@ -357,37 +353,35 @@ contains
         c_Q = c_Q * sum_w
 
         ! Compute covariance matrix H = (P - c_P) * (Q - c_Q)^T and variance of P
-        allocate(covariance(d,d), source=zero_csp)
-        allocate(tmp_d(d), source=zero_csp)
+        allocate(covariance(d,d),tmp_d1(d), tmp_d2(d), source=zero_csp)
         variance_p = zero_sp
 
         if (present(W)) then
+            ! Calculate the weighted variance by the formula (1/sum(w))*sum(w_i*(P_i - c_P)^2)
             do point = 1, N
-                tmp_d = P(:, point) - c_P(:)
-                tmp_N(point) = stdlib_dot_product_kahan(tmp_d, tmp_d)
+                tmp_d1 = P(:, point) - c_P(:)
+                tmp_N(point) = W(point) * stdlib_dot_product_kahan(tmp_d1, tmp_d1)
+                tmp_d2 = Q(:, point) - c_Q(:)
+
+                call gerc(d, d, cmplx(W(point), kind=sp), tmp_d1, 1, tmp_d2, 1, covariance, d)
             end do
-            tmp_N(:) = W(:) * tmp_N(:)
             variance_p = stdlib_sum_kahan(tmp_N)
-            do concurrent( j=1:d, i=1:d)
-                covariance(i, j) = stdlib_dot_product_kahan(Q(j, :) - c_Q(j), W*(P(i, :) - c_P(i)))
-            enddo
         else
-            ! Calculate variance by the formula (1/n)*sigma(P - c_P)^2
+            ! Calculate variance by the formula (1/n)*sum(P_i - c_P)^2
             do point = 1, N
-                tmp_d = P(:, point) - c_P(:)
-                tmp_N(point) = stdlib_dot_product_kahan(tmp_d, tmp_d)
+                tmp_d1 = P(:, point) - c_P(:)
+                tmp_N(point) = stdlib_dot_product_kahan(tmp_d1, tmp_d1)
+                tmp_d2 = Q(:, point) - c_Q(:)
+
+                call gerc(d, d, one_csp, tmp_d1, 1, tmp_d2, 1, covariance, d)
             end do
             variance_p = stdlib_sum_kahan(tmp_N)
-            do concurrent( j=1:d, i=1:d)
-                covariance(i,j) = stdlib_dot_product_kahan((Q(j,:) - c_Q(j)), (P(i,:) - c_P(i)))
-            enddo
         end if
 
         covariance = covariance * sum_w
         variance_p = variance_p * sum_w
 
-        allocate(U(d,d), source=zero_csp)
-        allocate(Vt(d,d), source=zero_csp)
+        allocate(U(d,d), Vt(d,d), source=zero_csp)
         allocate(S(d), source=zero_sp)
 
         ! SVD of covariance matrix H -> H = U * S * Vt
@@ -443,8 +437,8 @@ contains
         !! Enable scaling
 
         ! Internal variables.
-        integer :: i, j, point, d, N
-        complex(dp), allocatable :: covariance(:,:), U(:,:), Vt(:,:), vec(:), tmp_N(:), tmp_d(:), c_P(:), c_Q(:)
+        integer :: i, point, d, N
+        complex(dp), allocatable :: covariance(:,:), U(:,:), Vt(:,:), vec(:), tmp_N(:), tmp_d1(:), tmp_d2(:), c_P(:), c_Q(:)
         real(dp) :: sum_w, variance_p
         real(dp), allocatable :: S(:)
         complex(dp) :: temp
@@ -493,37 +487,35 @@ contains
         c_Q = c_Q * sum_w
 
         ! Compute covariance matrix H = (P - c_P) * (Q - c_Q)^T and variance of P
-        allocate(covariance(d,d), source=zero_cdp)
-        allocate(tmp_d(d), source=zero_cdp)
+        allocate(covariance(d,d),tmp_d1(d), tmp_d2(d), source=zero_cdp)
         variance_p = zero_dp
 
         if (present(W)) then
+            ! Calculate the weighted variance by the formula (1/sum(w))*sum(w_i*(P_i - c_P)^2)
             do point = 1, N
-                tmp_d = P(:, point) - c_P(:)
-                tmp_N(point) = stdlib_dot_product_kahan(tmp_d, tmp_d)
+                tmp_d1 = P(:, point) - c_P(:)
+                tmp_N(point) = W(point) * stdlib_dot_product_kahan(tmp_d1, tmp_d1)
+                tmp_d2 = Q(:, point) - c_Q(:)
+
+                call gerc(d, d, cmplx(W(point), kind=dp), tmp_d1, 1, tmp_d2, 1, covariance, d)
             end do
-            tmp_N(:) = W(:) * tmp_N(:)
             variance_p = stdlib_sum_kahan(tmp_N)
-            do concurrent( j=1:d, i=1:d)
-                covariance(i, j) = stdlib_dot_product_kahan(Q(j, :) - c_Q(j), W*(P(i, :) - c_P(i)))
-            enddo
         else
-            ! Calculate variance by the formula (1/n)*sigma(P - c_P)^2
+            ! Calculate variance by the formula (1/n)*sum(P_i - c_P)^2
             do point = 1, N
-                tmp_d = P(:, point) - c_P(:)
-                tmp_N(point) = stdlib_dot_product_kahan(tmp_d, tmp_d)
+                tmp_d1 = P(:, point) - c_P(:)
+                tmp_N(point) = stdlib_dot_product_kahan(tmp_d1, tmp_d1)
+                tmp_d2 = Q(:, point) - c_Q(:)
+
+                call gerc(d, d, one_cdp, tmp_d1, 1, tmp_d2, 1, covariance, d)
             end do
             variance_p = stdlib_sum_kahan(tmp_N)
-            do concurrent( j=1:d, i=1:d)
-                covariance(i,j) = stdlib_dot_product_kahan((Q(j,:) - c_Q(j)), (P(i,:) - c_P(i)))
-            enddo
         end if
 
         covariance = covariance * sum_w
         variance_p = variance_p * sum_w
 
-        allocate(U(d,d), source=zero_cdp)
-        allocate(Vt(d,d), source=zero_cdp)
+        allocate(U(d,d), Vt(d,d), source=zero_cdp)
         allocate(S(d), source=zero_dp)
 
         ! SVD of covariance matrix H -> H = U * S * Vt
