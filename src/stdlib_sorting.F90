@@ -474,7 +474,7 @@ module stdlib_sorting
 !! order of first occurrence or be returned in sorted order.
 !!
 !! Its use has the syntax: 
-!!     output = unique(array, sorted_output)
+!!     output = unique(array, sorted_output[, tolerance] )
 !!
 !! with the arguments:
 !! * array: the rank-1 input array. It is an `intent(in)` argument of any
@@ -487,6 +487,12 @@ module stdlib_sorting
 !!   unique elements sorted in non-decreasing order. Otherwise, the unique
 !!   elements are returned in the order of their first appearance in
 !!   `array`.
+!!
+!! * `tolerance` (optional): It is an `intent(in)` argument available only
+!!    for real arrays. When `sorted_output` is `.true.`, two values
+!!    in sorted order whose absolute difference is less than or equal to
+!!    `tolerance` are considered equal. If omitted, `tolerance` defaults
+!!    to zero.
 !!
 !! The result is an allocatable rank-1 array of the same type as `array`
 !! containing one copy of each distinct element.
@@ -2011,10 +2017,16 @@ module stdlib_sorting
 !!
 !! The generic function interface implementing the `UNIQUE` algorithm to
 !! return the distinct elements of a rank-1 array.
-
+!!
 !! The result may either preserve the order of first occurrence or be
 !! returned in sorted order, depending on the value of the
 !! `SORTED_OUTPUT` argument.
+!!
+!! For real arrays, an optional `TOLERANCE` argument may be supplied
+!! when `SORTED_OUTPUT` is `.true.`. Two values whose absolute
+!! difference is less than or equal to `TOLERANCE` are considered
+!! equal. The `TOLERANCE` argument is not available for integer
+!! overloads.
         module function int8_unique(A, sorted_output) result(output)
 !! Version: experimental
 !!
@@ -2051,22 +2063,24 @@ module stdlib_sorting
             logical, intent(in) :: sorted_output
             integer(int64), allocatable :: output(:)
         end function
-        module function sp_unique(A, sorted_output) result(output)
+        module function sp_unique(A, sorted_output, tolerance) result(output)
 !! Version: experimental
 !!
-!! `sp_unique( array, sorted_output )` returns the distinct
-!! elements of the input array of type `real(sp)`.
+!! `sp_unique( array, sorted_output[, tolerance] )` returns the
+!! distinct elements of the input array of type `real(sp)`.
             real(sp), intent(in) :: A(:)
             logical, intent(in) :: sorted_output
+            real(sp), optional, intent(in) :: tolerance
             real(sp), allocatable :: output(:)
         end function
-        module function dp_unique(A, sorted_output) result(output)
+        module function dp_unique(A, sorted_output, tolerance) result(output)
 !! Version: experimental
 !!
-!! `dp_unique( array, sorted_output )` returns the distinct
-!! elements of the input array of type `real(dp)`.
+!! `dp_unique( array, sorted_output[, tolerance] )` returns the
+!! distinct elements of the input array of type `real(dp)`.
             real(dp), intent(in) :: A(:)
             logical, intent(in) :: sorted_output
+            real(dp), optional, intent(in) :: tolerance
             real(dp), allocatable :: output(:)
         end function
     end interface
@@ -2088,53 +2102,43 @@ module stdlib_sorting
             integer(int64), intent(inout) :: temp(:)
             integer(int64), allocatable :: output(:)
         end function
-        module function sp_sort_unique(temp) result(output)
+        module function sp_sort_unique(temp, tolerance) result(output)
             real(sp), intent(inout) :: temp(:)
+            real(sp), intent(in) :: tolerance
             real(sp), allocatable :: output(:)
         end function
-        module function dp_sort_unique(temp) result(output)
+        module function dp_sort_unique(temp, tolerance) result(output)
             real(dp), intent(inout) :: temp(:)
+            real(dp), intent(in) :: tolerance
             real(dp), allocatable :: output(:)
         end function
     end interface
 
     interface stable_unique
-        ! #:if name1 != 'xdp'
         module function int8_stable_unique(temp) result(output)
             integer(int8), intent(in) :: temp(:)
             integer(int8), allocatable :: output(:)
         end function
-        ! #:endif
-        ! #:if name1 != 'xdp'
         module function int16_stable_unique(temp) result(output)
             integer(int16), intent(in) :: temp(:)
             integer(int16), allocatable :: output(:)
         end function
-        ! #:endif
-        ! #:if name1 != 'xdp'
         module function int32_stable_unique(temp) result(output)
             integer(int32), intent(in) :: temp(:)
             integer(int32), allocatable :: output(:)
         end function
-        ! #:endif
-        ! #:if name1 != 'xdp'
         module function int64_stable_unique(temp) result(output)
             integer(int64), intent(in) :: temp(:)
             integer(int64), allocatable :: output(:)
         end function
-        ! #:endif
-        ! #:if name1 != 'xdp'
         module function sp_stable_unique(temp) result(output)
             real(sp), intent(in) :: temp(:)
             real(sp), allocatable :: output(:)
         end function
-        ! #:endif
-        ! #:if name1 != 'xdp'
         module function dp_stable_unique(temp) result(output)
             real(dp), intent(in) :: temp(:)
             real(dp), allocatable :: output(:)
         end function
-        ! #:endif
     end interface
 
 contains
