@@ -1,7 +1,6 @@
 
 submodule(stdlib_sorting) stdlib_sorting_unique
     use stdlib_hashmaps, only: chaining_hashmap_type
-    use stdlib_hashmap_wrappers, only: key_type
     use stdlib_constants
     implicit none
 
@@ -17,6 +16,7 @@ contains
             allocate(output(0))
             return
         end if
+
         allocate(temp, source=A)
         if(sorted_output) then
             output = sort_unique(temp)
@@ -36,6 +36,7 @@ contains
             allocate(output(0))
             return
         end if
+
         allocate(temp, source=A)
         if(sorted_output) then
             output = sort_unique(temp)
@@ -55,6 +56,7 @@ contains
             allocate(output(0))
             return
         end if
+
         allocate(temp, source=A)
         if(sorted_output) then
             output = sort_unique(temp)
@@ -74,6 +76,7 @@ contains
             allocate(output(0))
             return
         end if
+
         allocate(temp, source=A)
         if(sorted_output) then
             output = sort_unique(temp)
@@ -82,39 +85,49 @@ contains
         end if
         deallocate(temp)
     end function
-    module function sp_unique(A, sorted_output) result(output)
+    module function sp_unique(A, sorted_output, tolerance) result(output)
         real(sp), intent(in) :: A(:)
         logical, intent(in) :: sorted_output
         real(sp), allocatable :: output(:)
+        real(sp), optional, intent(in) :: tolerance
 
+        real(sp) :: tolerance_
         real(sp), allocatable:: temp(:)
 
         if(size(A) == 0) then
             allocate(output(0))
             return
         end if
+
+        tolerance_ = optval(tolerance, 0.0_sp)
+        if(tolerance_ < 0.0_sp) error stop "tolerance must be non-negative"
         allocate(temp, source=A)
         if(sorted_output) then
-            output = sort_unique(temp)
+            output = sort_unique(temp, tolerance_)
         else
             output = stable_unique(temp)
         end if
         deallocate(temp)
     end function
-    module function dp_unique(A, sorted_output) result(output)
+    module function dp_unique(A, sorted_output, tolerance) result(output)
         real(dp), intent(in) :: A(:)
         logical, intent(in) :: sorted_output
         real(dp), allocatable :: output(:)
+        real(dp), optional, intent(in) :: tolerance
 
+        real(dp) :: tolerance_
         real(dp), allocatable:: temp(:)
 
         if(size(A) == 0) then
             allocate(output(0))
             return
         end if
+
+        tolerance_ = optval(tolerance, 0.0_dp)
+        if(tolerance_ < 0.0_dp) error stop "tolerance must be non-negative"
         allocate(temp, source=A)
         if(sorted_output) then
-            output = sort_unique(temp)
+            output = sort_unique(temp, tolerance_)
         else
             output = stable_unique(temp)
         end if
@@ -185,34 +198,42 @@ contains
         output = pack(temp, mask)
         deallocate(mask)
     end function
-    module function sp_sort_unique(temp) result(output)
+    module function sp_sort_unique(temp, tolerance) result(output)
         real(sp), intent(inout) :: temp(:)
         real(sp), allocatable :: output(:)
+        real(sp), intent(in) :: tolerance
 
         logical, allocatable :: mask(:)
         integer :: i
+        real(sp) :: last_unique
 
         allocate(mask(size(temp)))
         mask(1) = .true.
         call sort(temp)
+        last_unique = temp(1)
         do i = 2, size(temp)
-            mask(i) = temp(i) /= temp(i-1)
+            mask(i) = abs(temp(i)-last_unique) > tolerance
+            if(mask(i)) last_unique = temp(i)
         end do
         output = pack(temp, mask)
         deallocate(mask)
     end function
-    module function dp_sort_unique(temp) result(output)
+    module function dp_sort_unique(temp, tolerance) result(output)
         real(dp), intent(inout) :: temp(:)
         real(dp), allocatable :: output(:)
+        real(dp), intent(in) :: tolerance
 
         logical, allocatable :: mask(:)
         integer :: i
+        real(dp) :: last_unique
 
         allocate(mask(size(temp)))
         mask(1) = .true.
         call sort(temp)
+        last_unique = temp(1)
         do i = 2, size(temp)
-            mask(i) = temp(i) /= temp(i-1)
+            mask(i) = abs(temp(i)-last_unique) > tolerance
+            if(mask(i)) last_unique = temp(i)
         end do
         output = pack(temp, mask)
         deallocate(mask)
