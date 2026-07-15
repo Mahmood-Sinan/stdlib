@@ -1,6 +1,9 @@
+#include "macros.inc"
 
 submodule(stdlib_sorting) stdlib_sorting_unique
+#if STDLIB_HASHMAPS
     use stdlib_hashmaps, only: chaining_hashmap_type
+#endif
     use stdlib_constants
     implicit none
 
@@ -21,6 +24,9 @@ contains
         if(sorted_output) then
             output = sort_unique(temp)
         else
+#if !STDLIB_HASHMAPS
+            error stop "unsorted version requires STDLIB_HASHMAPS"
+#endif
             output = stable_unique(temp)
         end if
         deallocate(temp)
@@ -41,6 +47,9 @@ contains
         if(sorted_output) then
             output = sort_unique(temp)
         else
+#if !STDLIB_HASHMAPS
+            error stop "unsorted version requires STDLIB_HASHMAPS"
+#endif
             output = stable_unique(temp)
         end if
         deallocate(temp)
@@ -61,6 +70,9 @@ contains
         if(sorted_output) then
             output = sort_unique(temp)
         else
+#if !STDLIB_HASHMAPS
+            error stop "unsorted version requires STDLIB_HASHMAPS"
+#endif
             output = stable_unique(temp)
         end if
         deallocate(temp)
@@ -81,6 +93,9 @@ contains
         if(sorted_output) then
             output = sort_unique(temp)
         else
+#if !STDLIB_HASHMAPS
+            error stop "unsorted version requires STDLIB_HASHMAPS"
+#endif
             output = stable_unique(temp)
         end if
         deallocate(temp)
@@ -105,6 +120,9 @@ contains
         if(sorted_output) then
             output = sort_unique(temp, tolerance_)
         else
+#if !STDLIB_HASHMAPS
+            error stop "unsorted version requires STDLIB_HASHMAPS"
+#endif
             output = stable_unique(temp)
         end if
         deallocate(temp)
@@ -129,6 +147,9 @@ contains
         if(sorted_output) then
             output = sort_unique(temp, tolerance_)
         else
+#if !STDLIB_HASHMAPS
+            error stop "unsorted version requires STDLIB_HASHMAPS"
+#endif
             output = stable_unique(temp)
         end if
         deallocate(temp)
@@ -239,6 +260,7 @@ contains
         deallocate(mask)
     end function
 
+#if STDLIB_HASHMAPS
     module function int8_stable_unique(temp) result(output)
         integer(int8), intent(in) :: temp(:)
         integer(int8), allocatable :: output(:)
@@ -395,5 +417,6 @@ contains
         output = pack(temp, mask)
         deallocate(mask)
     end function
+#endif
 
 end submodule stdlib_sorting_unique
