@@ -2114,28 +2114,28 @@ module stdlib_sorting
         end function
     end interface
 
-    interface stable_unique
-        module function int8_stable_unique(temp) result(output)
+    interface unsorted_unique
+        module function int8_unsorted_unique(temp) result(output)
             integer(int8), intent(in) :: temp(:)
             integer(int8), allocatable :: output(:)
         end function
-        module function int16_stable_unique(temp) result(output)
+        module function int16_unsorted_unique(temp) result(output)
             integer(int16), intent(in) :: temp(:)
             integer(int16), allocatable :: output(:)
         end function
-        module function int32_stable_unique(temp) result(output)
+        module function int32_unsorted_unique(temp) result(output)
             integer(int32), intent(in) :: temp(:)
             integer(int32), allocatable :: output(:)
         end function
-        module function int64_stable_unique(temp) result(output)
+        module function int64_unsorted_unique(temp) result(output)
             integer(int64), intent(in) :: temp(:)
             integer(int64), allocatable :: output(:)
         end function
-        module function sp_stable_unique(temp) result(output)
+        module function sp_unsorted_unique(temp) result(output)
             real(sp), intent(in) :: temp(:)
             real(sp), allocatable :: output(:)
         end function
-        module function dp_stable_unique(temp) result(output)
+        module function dp_unsorted_unique(temp) result(output)
             real(dp), intent(in) :: temp(:)
             real(dp), allocatable :: output(:)
         end function
