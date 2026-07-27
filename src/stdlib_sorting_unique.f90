@@ -8,108 +8,123 @@ submodule(stdlib_sorting) stdlib_sorting_unique
     implicit none
 
 contains
-    module function int8_unique(A, sorted_output) result(output)
+    module subroutine int8_unique(A, sorted_output, output)
         integer(int8), intent(in) :: A(:)
         logical, intent(in) :: sorted_output
-        integer(int8), allocatable :: output(:)
+        integer(int8), allocatable, intent(inout) :: output(:)
 
         integer(int8), allocatable:: temp(:)
 
         if(size(A) == 0) then
+            if (allocated(output)) then
+                deallocate(output)
+            end if
             allocate(output(0))
             return
         end if
 
         allocate(temp, source=A)
         if(sorted_output) then
-            output = sort_unique(temp)
+            call sort_unique(temp, output)
         else
 #if !STDLIB_HASHMAPS
             error stop "unsorted version requires STDLIB_HASHMAPS"
 #endif
-            output = unsorted_unique(temp)
+            call unsorted_unique(temp, output)
         end if
         deallocate(temp)
-    end function
-    module function int16_unique(A, sorted_output) result(output)
+    end subroutine
+    module subroutine int16_unique(A, sorted_output, output)
         integer(int16), intent(in) :: A(:)
         logical, intent(in) :: sorted_output
-        integer(int16), allocatable :: output(:)
+        integer(int16), allocatable, intent(inout) :: output(:)
 
         integer(int16), allocatable:: temp(:)
 
         if(size(A) == 0) then
+            if (allocated(output)) then
+                deallocate(output)
+            end if
             allocate(output(0))
             return
         end if
 
         allocate(temp, source=A)
         if(sorted_output) then
-            output = sort_unique(temp)
+            call sort_unique(temp, output)
         else
 #if !STDLIB_HASHMAPS
             error stop "unsorted version requires STDLIB_HASHMAPS"
 #endif
-            output = unsorted_unique(temp)
+            call unsorted_unique(temp, output)
         end if
         deallocate(temp)
-    end function
-    module function int32_unique(A, sorted_output) result(output)
+    end subroutine
+    module subroutine int32_unique(A, sorted_output, output)
         integer(int32), intent(in) :: A(:)
         logical, intent(in) :: sorted_output
-        integer(int32), allocatable :: output(:)
+        integer(int32), allocatable, intent(inout) :: output(:)
 
         integer(int32), allocatable:: temp(:)
 
         if(size(A) == 0) then
+            if (allocated(output)) then
+                deallocate(output)
+            end if
             allocate(output(0))
             return
         end if
 
         allocate(temp, source=A)
         if(sorted_output) then
-            output = sort_unique(temp)
+            call sort_unique(temp, output)
         else
 #if !STDLIB_HASHMAPS
             error stop "unsorted version requires STDLIB_HASHMAPS"
 #endif
-            output = unsorted_unique(temp)
+            call unsorted_unique(temp, output)
         end if
         deallocate(temp)
-    end function
-    module function int64_unique(A, sorted_output) result(output)
+    end subroutine
+    module subroutine int64_unique(A, sorted_output, output)
         integer(int64), intent(in) :: A(:)
         logical, intent(in) :: sorted_output
-        integer(int64), allocatable :: output(:)
+        integer(int64), allocatable, intent(inout) :: output(:)
 
         integer(int64), allocatable:: temp(:)
 
         if(size(A) == 0) then
+            if (allocated(output)) then
+                deallocate(output)
+            end if
             allocate(output(0))
             return
         end if
 
         allocate(temp, source=A)
         if(sorted_output) then
-            output = sort_unique(temp)
+            call sort_unique(temp, output)
         else
 #if !STDLIB_HASHMAPS
             error stop "unsorted version requires STDLIB_HASHMAPS"
 #endif
-            output = unsorted_unique(temp)
+            call unsorted_unique(temp, output)
         end if
         deallocate(temp)
-    end function
-    module function sp_unique(A, sorted_output, tolerance) result(output)
+    end subroutine
+    module subroutine sp_unique(A, sorted_output, output, tolerance)
         real(sp), intent(in) :: A(:)
         logical, intent(in) :: sorted_output
-        real(sp), allocatable :: output(:)
+        real(sp), allocatable, intent(inout) :: output(:)
         real(sp), optional, intent(in) :: tolerance
 
         real(sp) :: tolerance_
         real(sp), allocatable:: temp(:)
 
         if(size(A) == 0) then
+            if (allocated(output)) then
+                deallocate(output)
+            end if
             allocate(output(0))
             return
         end if
@@ -118,25 +133,28 @@ contains
         if(tolerance_ < 0.0_sp) error stop "tolerance must be non-negative"
         allocate(temp, source=A)
         if(sorted_output) then
-            output = sort_unique(temp, tolerance_)
+            call sort_unique(temp, output, tolerance_)
         else
 #if !STDLIB_HASHMAPS
             error stop "unsorted version requires STDLIB_HASHMAPS"
 #endif
-            output = unsorted_unique(temp)
+            call unsorted_unique(temp, output)
         end if
         deallocate(temp)
-    end function
-    module function dp_unique(A, sorted_output, tolerance) result(output)
+    end subroutine
+    module subroutine dp_unique(A, sorted_output, output, tolerance)
         real(dp), intent(in) :: A(:)
         logical, intent(in) :: sorted_output
-        real(dp), allocatable :: output(:)
+        real(dp), allocatable, intent(inout) :: output(:)
         real(dp), optional, intent(in) :: tolerance
 
         real(dp) :: tolerance_
         real(dp), allocatable:: temp(:)
 
         if(size(A) == 0) then
+            if (allocated(output)) then
+                deallocate(output)
+            end if
             allocate(output(0))
             return
         end if
@@ -145,19 +163,19 @@ contains
         if(tolerance_ < 0.0_dp) error stop "tolerance must be non-negative"
         allocate(temp, source=A)
         if(sorted_output) then
-            output = sort_unique(temp, tolerance_)
+            call sort_unique(temp, output, tolerance_)
         else
 #if !STDLIB_HASHMAPS
             error stop "unsorted version requires STDLIB_HASHMAPS"
 #endif
-            output = unsorted_unique(temp)
+            call unsorted_unique(temp, output)
         end if
         deallocate(temp)
-    end function
+    end subroutine
 
-    module function int8_sort_unique(temp) result(output)
+    module subroutine int8_sort_unique(temp, output)
         integer(int8), intent(inout) :: temp(:)
-        integer(int8), allocatable :: output(:)
+        integer(int8), allocatable, intent(inout) :: output(:)
 
         logical, allocatable :: mask(:)
         integer :: i
@@ -168,12 +186,18 @@ contains
         do i = 2, size(temp)
             mask(i) = temp(i) /= temp(i-1)
         end do
+        if (.not. allocated(output)) then
+            allocate(output(size(temp)))
+        else if (size(output) < size(temp)) then
+            deallocate(output)
+            allocate(output(size(temp)))
+        end if
         output = pack(temp, mask)
         deallocate(mask)
-    end function
-    module function int16_sort_unique(temp) result(output)
+    end subroutine
+    module subroutine int16_sort_unique(temp, output)
         integer(int16), intent(inout) :: temp(:)
-        integer(int16), allocatable :: output(:)
+        integer(int16), allocatable, intent(inout) :: output(:)
 
         logical, allocatable :: mask(:)
         integer :: i
@@ -184,12 +208,18 @@ contains
         do i = 2, size(temp)
             mask(i) = temp(i) /= temp(i-1)
         end do
+        if (.not. allocated(output)) then
+            allocate(output(size(temp)))
+        else if (size(output) < size(temp)) then
+            deallocate(output)
+            allocate(output(size(temp)))
+        end if
         output = pack(temp, mask)
         deallocate(mask)
-    end function
-    module function int32_sort_unique(temp) result(output)
+    end subroutine
+    module subroutine int32_sort_unique(temp, output)
         integer(int32), intent(inout) :: temp(:)
-        integer(int32), allocatable :: output(:)
+        integer(int32), allocatable, intent(inout) :: output(:)
 
         logical, allocatable :: mask(:)
         integer :: i
@@ -200,12 +230,18 @@ contains
         do i = 2, size(temp)
             mask(i) = temp(i) /= temp(i-1)
         end do
+        if (.not. allocated(output)) then
+            allocate(output(size(temp)))
+        else if (size(output) < size(temp)) then
+            deallocate(output)
+            allocate(output(size(temp)))
+        end if
         output = pack(temp, mask)
         deallocate(mask)
-    end function
-    module function int64_sort_unique(temp) result(output)
+    end subroutine
+    module subroutine int64_sort_unique(temp, output)
         integer(int64), intent(inout) :: temp(:)
-        integer(int64), allocatable :: output(:)
+        integer(int64), allocatable, intent(inout) :: output(:)
 
         logical, allocatable :: mask(:)
         integer :: i
@@ -216,12 +252,18 @@ contains
         do i = 2, size(temp)
             mask(i) = temp(i) /= temp(i-1)
         end do
+        if (.not. allocated(output)) then
+            allocate(output(size(temp)))
+        else if (size(output) < size(temp)) then
+            deallocate(output)
+            allocate(output(size(temp)))
+        end if
         output = pack(temp, mask)
         deallocate(mask)
-    end function
-    module function sp_sort_unique(temp, tolerance) result(output)
+    end subroutine
+    module subroutine sp_sort_unique(temp, output, tolerance)
         real(sp), intent(inout) :: temp(:)
-        real(sp), allocatable :: output(:)
+        real(sp), allocatable, intent(inout) :: output(:)
         real(sp), intent(in) :: tolerance
 
         logical, allocatable :: mask(:)
@@ -236,12 +278,18 @@ contains
             mask(i) = abs(temp(i)-last_unique) > tolerance
             if(mask(i)) last_unique = temp(i)
         end do
+        if (.not. allocated(output)) then
+            allocate(output(size(temp)))
+        else if (size(output) < size(temp)) then
+            deallocate(output)
+            allocate(output(size(temp)))
+        end if
         output = pack(temp, mask)
         deallocate(mask)
-    end function
-    module function dp_sort_unique(temp, tolerance) result(output)
+    end subroutine
+    module subroutine dp_sort_unique(temp, output, tolerance)
         real(dp), intent(inout) :: temp(:)
-        real(dp), allocatable :: output(:)
+        real(dp), allocatable, intent(inout) :: output(:)
         real(dp), intent(in) :: tolerance
 
         logical, allocatable :: mask(:)
@@ -256,14 +304,20 @@ contains
             mask(i) = abs(temp(i)-last_unique) > tolerance
             if(mask(i)) last_unique = temp(i)
         end do
+        if (.not. allocated(output)) then
+            allocate(output(size(temp)))
+        else if (size(output) < size(temp)) then
+            deallocate(output)
+            allocate(output(size(temp)))
+        end if
         output = pack(temp, mask)
         deallocate(mask)
-    end function
+    end subroutine
 
 #if STDLIB_HASHMAPS
-    module function int8_unsorted_unique(temp) result(output)
+    module subroutine int8_unsorted_unique(temp, output)
         integer(int8), intent(in) :: temp(:)
-        integer(int8), allocatable :: output(:)
+        integer(int8), allocatable, intent(inout) :: output(:)
 
         type(chaining_hashmap_type) :: map
         logical, allocatable :: mask(:)
@@ -284,12 +338,18 @@ contains
                 mask(i) = .false.
             end if
         end do
+        if (.not. allocated(output)) then
+            allocate(output(size(temp)))
+        else if (size(output) < size(temp)) then
+            deallocate(output)
+            allocate(output(size(temp)))
+        end if
         output = pack(temp, mask)
         deallocate(mask)
-    end function
-    module function int16_unsorted_unique(temp) result(output)
+    end subroutine
+    module subroutine int16_unsorted_unique(temp, output)
         integer(int16), intent(in) :: temp(:)
-        integer(int16), allocatable :: output(:)
+        integer(int16), allocatable, intent(inout) :: output(:)
 
         type(chaining_hashmap_type) :: map
         logical, allocatable :: mask(:)
@@ -310,12 +370,18 @@ contains
                 mask(i) = .false.
             end if
         end do
+        if (.not. allocated(output)) then
+            allocate(output(size(temp)))
+        else if (size(output) < size(temp)) then
+            deallocate(output)
+            allocate(output(size(temp)))
+        end if
         output = pack(temp, mask)
         deallocate(mask)
-    end function
-    module function int32_unsorted_unique(temp) result(output)
+    end subroutine
+    module subroutine int32_unsorted_unique(temp, output)
         integer(int32), intent(in) :: temp(:)
-        integer(int32), allocatable :: output(:)
+        integer(int32), allocatable, intent(inout) :: output(:)
 
         type(chaining_hashmap_type) :: map
         logical, allocatable :: mask(:)
@@ -336,12 +402,18 @@ contains
                 mask(i) = .false.
             end if
         end do
+        if (.not. allocated(output)) then
+            allocate(output(size(temp)))
+        else if (size(output) < size(temp)) then
+            deallocate(output)
+            allocate(output(size(temp)))
+        end if
         output = pack(temp, mask)
         deallocate(mask)
-    end function
-    module function int64_unsorted_unique(temp) result(output)
+    end subroutine
+    module subroutine int64_unsorted_unique(temp, output)
         integer(int64), intent(in) :: temp(:)
-        integer(int64), allocatable :: output(:)
+        integer(int64), allocatable, intent(inout) :: output(:)
 
         type(chaining_hashmap_type) :: map
         logical, allocatable :: mask(:)
@@ -362,12 +434,18 @@ contains
                 mask(i) = .false.
             end if
         end do
+        if (.not. allocated(output)) then
+            allocate(output(size(temp)))
+        else if (size(output) < size(temp)) then
+            deallocate(output)
+            allocate(output(size(temp)))
+        end if
         output = pack(temp, mask)
         deallocate(mask)
-    end function
-    module function sp_unsorted_unique(temp) result(output)
+    end subroutine
+    module subroutine sp_unsorted_unique(temp, output)
         real(sp), intent(in) :: temp(:)
-        real(sp), allocatable :: output(:)
+        real(sp), allocatable, intent(inout) :: output(:)
 
         type(chaining_hashmap_type) :: map
         logical, allocatable :: mask(:)
@@ -388,12 +466,18 @@ contains
                 mask(i) = .false.
             end if
         end do
+        if (.not. allocated(output)) then
+            allocate(output(size(temp)))
+        else if (size(output) < size(temp)) then
+            deallocate(output)
+            allocate(output(size(temp)))
+        end if
         output = pack(temp, mask)
         deallocate(mask)
-    end function
-    module function dp_unsorted_unique(temp) result(output)
+    end subroutine
+    module subroutine dp_unsorted_unique(temp, output)
         real(dp), intent(in) :: temp(:)
-        real(dp), allocatable :: output(:)
+        real(dp), allocatable, intent(inout) :: output(:)
 
         type(chaining_hashmap_type) :: map
         logical, allocatable :: mask(:)
@@ -414,9 +498,15 @@ contains
                 mask(i) = .false.
             end if
         end do
+        if (.not. allocated(output)) then
+            allocate(output(size(temp)))
+        else if (size(output) < size(temp)) then
+            deallocate(output)
+            allocate(output(size(temp)))
+        end if
         output = pack(temp, mask)
         deallocate(mask)
-    end function
+    end subroutine
 #endif
 
 end submodule stdlib_sorting_unique
