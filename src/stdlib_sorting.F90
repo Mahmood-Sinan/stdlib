@@ -466,6 +466,64 @@ module stdlib_sorting
 !!    end subroutine sort_a_data
 !!```
 
+    public unique
+!! Version: experimental
+!!
+!! The generic function implementing the `UNIQUE` algorithm to return the 
+!! distinct elements of a rank-1 array. The result may either preserve the
+!! order of first occurrence or be returned in sorted order.
+!!
+!! Its use has the syntax: 
+!!     output = unique(array, sorted_output[, tolerance] )
+!!
+!! with the arguments:
+!! * array: the rank-1 input array. It is an `intent(in)` argument of any
+!!   of the types `integer(int8)`, `integer(int16)`, `integer(int32)`,
+!!   `integer(int64)`, `real(real32)`, `real(real64)`, or
+!!   `real(real128)`.
+!!
+!! * sorted_output: a scalar of type default logical. It is an
+!!   `intent(in)` argument. If `.true.`, the returned array contains the
+!!   unique elements sorted in non-decreasing order. Otherwise, the unique
+!!   elements are returned in the order of their first appearance in
+!!   `array`.
+!!
+!! * `tolerance` (optional): It is an `intent(in)` argument available only
+!!    for real arrays. When `sorted_output` is `.true.`, two values
+!!    in sorted order whose absolute difference is less than or equal to
+!!    `tolerance` are considered equal. If omitted, `tolerance` defaults
+!!    to zero.
+!!
+!! The result is an allocatable rank-1 array of the same type as `array`
+!! containing one copy of each distinct element.
+!!
+!! **Note:** The unsorted (`sorted_output = .false.`) implementation is
+!! currently unavailable for `real(`xdp`)` because hashing is
+!! performed on the underlying binary representation, which is not
+!! sufficiently portable for this kind.
+!!
+!!#### Examples
+!!
+!! Remove duplicates while preserving the original order:
+!!
+!!```Fortran
+!!    integer :: a(8) = [4, 2, 4, 1, 2, 3, 1, 5]
+!!    integer, allocatable :: b(:)
+!!
+!!    b = unique(a, .false.)
+!!    ! b = [4, 2, 1, 3, 5]
+!!```
+!!
+!! Return the unique values in sorted order:
+!!
+!!```Fortran
+!!    integer :: a(8) = [4, 2, 4, 1, 2, 3, 1, 5]
+!!    integer, allocatable :: b(:)
+!!
+!!    b = unique(a, .true.)
+!!    ! b = [1, 2, 3, 4, 5]
+!!```
+
     interface ord_sort
 !! Version: experimental
 !!
@@ -1953,6 +2011,137 @@ module stdlib_sorting
 #endif
 
     end interface sort_index
+
+    interface unique
+!! Version: experimental
+!!
+!! The generic subroutine interface implementing the `UNIQUE` algorithm to
+!! compute the distinct elements of a rank-1 array.
+!!
+!! The output array either preserves the order of first occurrence or
+!! contains the distinct elements in sorted order, depending on the
+!! value of the `SORTED_OUTPUT` argument.
+!!
+!! For real arrays, an optional `TOLERANCE` argument may be supplied
+!! when `SORTED_OUTPUT` is `.true.`. Two values whose absolute
+!! difference is less than or equal to `TOLERANCE` are considered
+!! equal. The `TOLERANCE` argument is not available for integer
+!! overloads.
+        module subroutine int8_unique(A, sorted_output, output)
+!! Version: experimental
+!!
+!! `call int8_unique(array, sorted_output, output)` stores the
+!! distinct elements of the input array of type `integer(int8)` in `output`.
+            integer(int8), intent(in) :: A(:)
+            logical, intent(in) :: sorted_output
+            integer(int8), allocatable, intent(inout) :: output(:)
+        end subroutine
+        module subroutine int16_unique(A, sorted_output, output)
+!! Version: experimental
+!!
+!! `call int16_unique(array, sorted_output, output)` stores the
+!! distinct elements of the input array of type `integer(int16)` in `output`.
+            integer(int16), intent(in) :: A(:)
+            logical, intent(in) :: sorted_output
+            integer(int16), allocatable, intent(inout) :: output(:)
+        end subroutine
+        module subroutine int32_unique(A, sorted_output, output)
+!! Version: experimental
+!!
+!! `call int32_unique(array, sorted_output, output)` stores the
+!! distinct elements of the input array of type `integer(int32)` in `output`.
+            integer(int32), intent(in) :: A(:)
+            logical, intent(in) :: sorted_output
+            integer(int32), allocatable, intent(inout) :: output(:)
+        end subroutine
+        module subroutine int64_unique(A, sorted_output, output)
+!! Version: experimental
+!!
+!! `call int64_unique(array, sorted_output, output)` stores the
+!! distinct elements of the input array of type `integer(int64)` in `output`.
+            integer(int64), intent(in) :: A(:)
+            logical, intent(in) :: sorted_output
+            integer(int64), allocatable, intent(inout) :: output(:)
+        end subroutine
+        module subroutine sp_unique(A, sorted_output, output, tolerance)
+!! Version: experimental
+!!
+!! `call sp_unique(array, sorted_output, output[, tolerance])`
+!! stores the distinct elements of the input array of type `real(sp)` in
+!! `output`.
+            real(sp), intent(in) :: A(:)
+            logical, intent(in) :: sorted_output
+            real(sp), optional, intent(in) :: tolerance
+            real(sp), allocatable, intent(inout) :: output(:)
+        end subroutine
+        module subroutine dp_unique(A, sorted_output, output, tolerance)
+!! Version: experimental
+!!
+!! `call dp_unique(array, sorted_output, output[, tolerance])`
+!! stores the distinct elements of the input array of type `real(dp)` in
+!! `output`.
+            real(dp), intent(in) :: A(:)
+            logical, intent(in) :: sorted_output
+            real(dp), optional, intent(in) :: tolerance
+            real(dp), allocatable, intent(inout) :: output(:)
+        end subroutine
+    end interface
+
+    interface sort_unique
+        module subroutine int8_sort_unique(temp, output)
+            integer(int8), intent(inout) :: temp(:)
+            integer(int8), allocatable, intent(inout) :: output(:)
+        end subroutine
+        module subroutine int16_sort_unique(temp, output)
+            integer(int16), intent(inout) :: temp(:)
+            integer(int16), allocatable, intent(inout) :: output(:)
+        end subroutine
+        module subroutine int32_sort_unique(temp, output)
+            integer(int32), intent(inout) :: temp(:)
+            integer(int32), allocatable, intent(inout) :: output(:)
+        end subroutine
+        module subroutine int64_sort_unique(temp, output)
+            integer(int64), intent(inout) :: temp(:)
+            integer(int64), allocatable, intent(inout) :: output(:)
+        end subroutine
+        module subroutine sp_sort_unique(temp, output, tolerance)
+            real(sp), intent(inout) :: temp(:)
+            real(sp), intent(in) :: tolerance
+            real(sp), allocatable, intent(inout) :: output(:)
+        end subroutine
+        module subroutine dp_sort_unique(temp, output, tolerance)
+            real(dp), intent(inout) :: temp(:)
+            real(dp), intent(in) :: tolerance
+            real(dp), allocatable, intent(inout) :: output(:)
+        end subroutine
+    end interface
+
+    interface unsorted_unique
+        module subroutine int8_unsorted_unique(temp, output)
+            integer(int8), intent(in) :: temp(:)
+            integer(int8), allocatable, intent(inout) :: output(:)
+        end subroutine
+        module subroutine int16_unsorted_unique(temp, output)
+            integer(int16), intent(in) :: temp(:)
+            integer(int16), allocatable, intent(inout) :: output(:)
+        end subroutine
+        module subroutine int32_unsorted_unique(temp, output)
+            integer(int32), intent(in) :: temp(:)
+            integer(int32), allocatable, intent(inout) :: output(:)
+        end subroutine
+        module subroutine int64_unsorted_unique(temp, output)
+            integer(int64), intent(in) :: temp(:)
+            integer(int64), allocatable, intent(inout) :: output(:)
+        end subroutine
+        module subroutine sp_unsorted_unique(temp, output)
+            real(sp), intent(in) :: temp(:)
+            real(sp), allocatable, intent(inout) :: output(:)
+        end subroutine
+        module subroutine dp_unsorted_unique(temp, output)
+            real(dp), intent(in) :: temp(:)
+            real(dp), allocatable, intent(inout) :: output(:)
+        end subroutine
+    end interface
 
 contains
 
